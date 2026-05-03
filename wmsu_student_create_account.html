@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Create Account</title>
+</head>
+<body style="background-color: aquamarine;">
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">WMSU CCS Student Create Account form with name, WMSU email, password, and COR upload fields</h2>
+
+<div class="reg-wrap">
+  <div class="reg-header">
+    <div style="display:flex;gap:10px;align-items:center;">
+        <img src="wmsu.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="WMSU Logo"/>
+        <img src="ccs.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="CCS Logo"/>
+    </div>
+    <div class="reg-header-text">
+      <strong>WMSU AttendTrack</strong>
+      <span>Student Registration</span>
+    </div>
+  </div>
+
+  <div class="reg-body" style="background-color: white;">
+    <div class="step-bar">
+      <div class="step active"><div class="step-dot">1</div><span class="step-label">Account Info</span></div>
+      <div class="step-line"></div>
+      <div class="step inactive"><div class="step-dot">2</div><span class="step-label">Verification</span></div>
+      <div class="step-line"></div>
+      <div class="step inactive"><div class="step-dot">3</div><span class="step-label">Confirmation</span></div>
+    </div>
+
+    <div class="reg-section-label">Personal Information</div>
+
+    <div class="form-row triple">
+      <div class="field-group">
+        <label>First Name</label>
+        <input type="text" id="fname" placeholder="e.g. Juan"/>
+      </div>
+      <div class="field-group">
+        <label>Middle Name <span class="opt-badge">Optional</span></label>
+        <input type="text" id="mname" placeholder="e.g. dela Cruz"/>
+      </div>
+      <div class="field-group">
+        <label>Last Name</label>
+        <input type="text" id="lname" placeholder="e.g. Santos"/>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <div class="reg-section-label">WMSU Email Address</div>
+    <div class="form-row single" style="margin-bottom:6px;">
+      <div class="field-group">
+        <label>Institutional Email</label>
+        <div class="email-wrap">
+          <input type="text" id="email-user" placeholder="student.id" oninput="validateEmail(this)"/>
+          <span class="email-suffix">@wmsu.edu.ph</span>
+        </div>
+        <div id="email-hint" style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;">Use your WMSU-issued student email address</div>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <div class="reg-section-label">Password</div>
+    <div class="form-row">
+      <div class="field-group">
+        <label>Create Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="pw1" placeholder="Minimum 8 characters" oninput="checkStrength(this.value)"/>
+          <button class="pw-toggle" type="button" onclick="togglePw('pw1',this)" title="Show/hide">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="pw-strength"><div class="pw-strength-bar" id="strength-bar"></div></div>
+        <div class="pw-hint" id="pw-hint-txt">Use letters, numbers, and symbols</div>
+      </div>
+      <div class="field-group">
+        <label>Confirm Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="pw2" placeholder="Re-enter password" oninput="checkMatch()"/>
+          <button class="pw-toggle" type="button" onclick="togglePw('pw2',this)" title="Show/hide">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div id="match-hint" style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;">&nbsp;</div>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <div class="reg-section-label">Certificate of Registration (COR)</div>
+    <div id="cor-dropzone" class="upload-box" onclick="document.getElementById('cor-file').click()" ondragover="event.preventDefault();this.style.background='rgba(201,168,76,0.13)'" ondragleave="this.style.background=''" ondrop="handleDrop(event)">
+      <div class="upload-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      </div>
+      <div class="upload-title">Upload your COR</div>
+      <div class="upload-sub">Drag & drop or <span>click to browse</span> — PDF or image</div>
+      <input type="file" id="cor-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFile(this)"/>
+    </div>
+    <div class="file-preview" id="cor-preview">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9b1f33" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="file-preview-name" id="file-name-txt">—</span>
+      <button class="file-preview-remove" onclick="removeFile()" title="Remove">×</button>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-submit" onclick="handleSubmit()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Create Account
+      </button>
+    </div>
+
+    <div class="already-text">Already have an account? <a onclick="sendPrompt('I already have a WMSU AttendTrack account, take me to the sign in page')">Sign in here</a></div>
+  </div>
+</div>
+<script src="Java.js"></script>
+
+</body>
+</html>
