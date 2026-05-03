@@ -292,13 +292,21 @@
     <div class="page-hd-left">
       <div class="breadcrumb">Admin &rsaquo; Students &rsaquo; <span>Subject Verification</span></div>
       <div class="page-title">Subject Verification</div>
-      <div class="page-sub">Verify enrolled subjects per student by department</div>
+      <div class="page-sub">Review student COR and verify enrolled subjects per student by department</div>
+    </div>
+  </div>
+
+  <!-- Info banner -->
+  <div style="display:flex;align-items:flex-start;gap:10px;background:var(--blue-bg);border:1.5px solid var(--blue);border-radius:var(--r-sm);padding:12px 16px;margin-bottom:16px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div style="font-size:13px;color:var(--blue);line-height:1.6">
+      <strong>COR-Based Verification:</strong> Students submit their <strong>Certificate of Registration (COR)</strong> for account and subject enrollment verification. Review the attached COR before approving or rejecting subject requests.
     </div>
   </div>
 
   <div class="card">
     <div class="card-hd">
-      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Subject Verification Queue</div>
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> COR Verification Queue</div>
       <div class="filter-bar">
         <div class="search-wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--muted)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> <input placeholder="Search student or subject..."/></div>
       </div>
@@ -311,68 +319,120 @@
     </div>
     <div id="sv-bscs" class="dept-panel">
       <div class="verify-cards" style="padding:16px">
-        <div class="verify-card">
-          <div>
-            <div style="font-weight:700;font-size:14px;">Regan Kalnain <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 1B · WMSU-2025-001</span></div>
-            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
-              <span class="subject-pill">CC 111 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">GE 1 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">NSTP 1 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">PE 1 <span class="sp-units">2 u</span></span>
+
+        <!-- Student 1 — with COR submitted -->
+        <div class="verify-card" style="flex-direction:column;gap:14px;align-items:stretch;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px">
+              <div style="font-weight:700;font-size:14px;">Regan Kalnain <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 1B · WMSU-2025-001</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--muted);">Submitted: May 2, 2025 · 9:14 AM</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+                <span class="subject-pill">CC 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">GE 1 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">NSTP 1 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">PE 1 <span class="sp-units">2 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;align-items:flex-start;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="openCorModal('Regan Kalnain','WMSU-2025-001','cor-placeholder-1')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> View COR</button>
+              <button class="btn btn-success btn-sm" onclick="approveVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
+              <button class="btn btn-danger btn-sm" onclick="rejectVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </div>
           </div>
-          <div style="display:flex;gap:8px;flex-shrink:0">
-            <button class="btn btn-success btn-sm" onclick="this.closest('.verify-card').style.opacity='.4'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
-            <button class="btn btn-danger btn-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
+          <!-- COR attachment indicator -->
+          <div class="cor-attachment" onclick="openCorModal('Regan Kalnain','WMSU-2025-001','cor-placeholder-1')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-001_Kalnain.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 245 KB · PDF</span>
+            <span class="cor-status-badge cor-status-new">NEW</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;color:var(--blue)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
         </div>
-        <div class="verify-card">
-          <div>
-            <div style="font-weight:700;font-size:14px;">Christoper Yabo <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 1B · WMSU-2025-002</span></div>
-            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
-              <span class="subject-pill">CC 111 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill" style="border-color:var(--orange);background:var(--orange-bg)">GE 1 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <span class="sp-units" style="background:var(--orange)">3 u</span></span>
+
+        <!-- Student 2 — COR with conflict warning -->
+        <div class="verify-card" style="flex-direction:column;gap:14px;align-items:stretch;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px">
+              <div style="font-weight:700;font-size:14px;">Christoper Yabo <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 1B · WMSU-2025-002</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--orange);font-weight:600;">⚠ Subject mismatch detected — review COR</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+                <span class="subject-pill">CC 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill" style="border-color:var(--orange);background:var(--orange-bg)">GE 1 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <span class="sp-units" style="background:var(--orange)">3 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;align-items:flex-start;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="openCorModal('Christoper Yabo','WMSU-2025-002','cor-placeholder-2')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> View COR</button>
+              <button class="btn btn-success btn-sm" onclick="approveVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
+              <button class="btn btn-danger btn-sm" onclick="rejectVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </div>
           </div>
-          <div style="display:flex;gap:8px;flex-shrink:0">
-            <button class="btn btn-success btn-sm" onclick="this.closest('.verify-card').style.opacity='.4'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
-            <button class="btn btn-danger btn-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
+          <div class="cor-attachment cor-attachment-warn" onclick="openCorModal('Christoper Yabo','WMSU-2025-002','cor-placeholder-2')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-002_Yabo.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 198 KB · PDF</span>
+            <span class="cor-status-badge" style="background:var(--orange);color:#fff;">MISMATCH</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;color:var(--orange)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
         </div>
-        <div class="verify-card">
-          <div>
-            <div style="font-weight:700;font-size:14px;">Maria Santos <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 2A · WMSU-2025-005</span></div>
-            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
-              <span class="subject-pill">CS 211 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">CS 212 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">CS 213 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">GE 3 <span class="sp-units">3 u</span></span>
+
+        <!-- Student 3 -->
+        <div class="verify-card" style="flex-direction:column;gap:14px;align-items:stretch;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px">
+              <div style="font-weight:700;font-size:14px;">Maria Santos <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 2A · WMSU-2025-005</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--muted);">Submitted: May 3, 2025 · 7:50 AM</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+                <span class="subject-pill">CS 211 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">CS 212 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">CS 213 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">GE 3 <span class="sp-units">3 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;align-items:flex-start;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="openCorModal('Maria Santos','WMSU-2025-005','cor-placeholder-3')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> View COR</button>
+              <button class="btn btn-success btn-sm" onclick="approveVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
+              <button class="btn btn-danger btn-sm" onclick="rejectVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </div>
           </div>
-          <div style="display:flex;gap:8px;flex-shrink:0">
-            <button class="btn btn-success btn-sm" onclick="this.closest('.verify-card').style.opacity='.4'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
-            <button class="btn btn-danger btn-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
+          <div class="cor-attachment" onclick="openCorModal('Maria Santos','WMSU-2025-005','cor-placeholder-3')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-005_Santos.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 312 KB · PDF</span>
+            <span class="cor-status-badge cor-status-new">NEW</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;color:var(--blue)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
         </div>
+
       </div>
     </div>
     <div id="sv-bsit" class="dept-panel" style="display:none">
       <div class="verify-cards" style="padding:16px">
-        <div class="verify-card">
-          <div>
-            <div style="font-weight:700;font-size:14px;">Lanie Cruz <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSIT 1B · WMSU-2025-007</span></div>
-            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
-              <span class="subject-pill">IT 111 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">GE 1 <span class="sp-units">3 u</span></span>
-              <span class="subject-pill">PE 1 <span class="sp-units">2 u</span></span>
+        <div class="verify-card" style="flex-direction:column;gap:14px;align-items:stretch;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px">
+              <div style="font-weight:700;font-size:14px;">Lanie Cruz <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSIT 1B · WMSU-2025-007</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--muted);">Submitted: May 3, 2025 · 8:30 AM</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+                <span class="subject-pill">IT 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">GE 1 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">PE 1 <span class="sp-units">2 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;align-items:flex-start;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="openCorModal('Lanie Cruz','WMSU-2025-007','cor-placeholder-4')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> View COR</button>
+              <button class="btn btn-success btn-sm" onclick="approveVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
+              <button class="btn btn-danger btn-sm" onclick="rejectVerifyCard(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </div>
           </div>
-          <div style="display:flex;gap:8px;flex-shrink:0">
-            <button class="btn btn-success btn-sm" onclick="this.closest('.verify-card').style.opacity='.4'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Verify All</button>
-            <button class="btn btn-danger btn-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
+          <div class="cor-attachment" onclick="openCorModal('Lanie Cruz','WMSU-2025-007','cor-placeholder-4')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-007_Cruz.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 178 KB · PDF</span>
+            <span class="cor-status-badge cor-status-new">NEW</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;color:var(--blue)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
         </div>
       </div>
@@ -393,11 +453,22 @@
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-ico stat-ico-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="5" y="3" width="14" height="18" rx="1"/><circle cx="15" cy="12" r="1"/></svg></div><div><div class="stat-num c-blue">9</div><div class="stat-lbl">Total Rooms</div></div></div>
-    <div class="stat-card"><div class="stat-ico stat-ico-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="stat-num c-green" id="avail-count">5</div><div class="stat-lbl">Available Now</div></div></div>
-    <div class="stat-card"><div class="stat-ico stat-ico-red"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div><div class="stat-num c-red" id="occ-count">4</div><div class="stat-lbl">Occupied Now</div></div></div>
-    <div class="stat-card"><div class="stat-ico stat-ico-orange">🪑</div><div><div class="stat-num c-orange">380</div><div class="stat-lbl">Total Seats</div></div></div>
+  <!-- Active Room Schedules Panel -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-hd">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Active Room Schedules
+        <span class="n-badge" style="margin-left:6px;background:var(--blue);color:#fff;" id="active-sched-count">0</span>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-room-sched')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Room Schedule
+      </button>
+    </div>
+    <div class="card-body" id="active-sched-list" style="display:flex;flex-wrap:wrap;gap:12px;min-height:64px;align-items:flex-start;">
+      <div style="color:var(--muted);font-size:13px;width:100%;text-align:center;padding:20px 0;" id="no-sched-msg">No active room schedules yet. Click <strong>Add Room Schedule</strong> to assign a room.</div>
+    </div>
   </div>
 
   <div class="card">
@@ -850,6 +921,108 @@
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-student-detail')">Close</button>
       <button class="btn btn-primary" onclick="saveStudentDetail()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- COR Viewer Modal -->
+<div class="modal-overlay" id="modal-cor-viewer">
+  <div class="modal modal-wide">
+    <div class="modal-hd">
+      <span class="modal-title" id="cor-modal-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Certificate of Registration</span>
+      <button class="modal-close" onclick="closeModal('modal-cor-viewer')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="cor-student-info" style="display:flex;gap:10px;align-items:center;margin-bottom:16px;padding:12px 14px;background:var(--blue-bg);border-radius:var(--r-sm);border:1px solid var(--blue)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <div>
+          <div style="font-weight:700;color:var(--blue);font-size:13px;" id="cor-name-display">Student Name</div>
+          <div style="font-size:11px;color:var(--muted);" id="cor-id-display">Student ID</div>
+        </div>
+      </div>
+      <!-- Simulated COR preview -->
+      <div style="background:#f9f9f9;border:1.5px dashed var(--border);border-radius:var(--r-sm);padding:24px;text-align:center;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <div style="font-weight:700;font-size:15px;color:var(--text);">COR Document Preview</div>
+        <div style="font-size:12px;color:var(--muted);max-width:300px;line-height:1.6">
+          In the live system, the student's uploaded Certificate of Registration (COR) PDF will be rendered here for admin review before approving or rejecting subject enrollment.
+        </div>
+        <div id="cor-file-label" style="margin-top:8px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--maroon);font-weight:600;background:var(--maroon-soft);color:#fff;padding:6px 14px;border-radius:20px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          COR File
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-cor-viewer')">Close</button>
+      <button class="btn btn-danger btn-sm" onclick="closeModal('modal-cor-viewer')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-cor-viewer');alert('Account and subjects verified successfully!')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Approve Verification</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Room Schedule Modal -->
+<div class="modal-overlay" id="modal-add-room-sched">
+  <div class="modal modal-wide">
+    <div class="modal-hd">
+      <span class="modal-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Add Room Schedule
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-add-room-sched')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field">
+          <label>Room</label>
+          <select id="rs-room">
+            <option>LR1</option><option>LR2</option><option>LR3</option><option>LR4</option><option>LR5</option><option>LAB1</option><option>LAB2</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Subject Code</label>
+          <select id="rs-subject">
+            <option>CC 100</option><option>CC 101</option><option>CC 102</option><option>CS 111</option><option>CS 121</option><option>CS 122</option><option>CS 123</option><option>CS 124</option><option>CS 125</option><option>CS 126</option><option>CS 130</option><option>CS 131</option><option>CS 132</option><option>CS 133</option><option>MATH 100</option><option>MATH 103</option><option>GE 1</option><option>GE 3</option><option>FIL 101</option><option>FIL 102</option><option>PE 1</option><option>PE 2</option><option>NSTP 1</option><option>NSTP 2</option><option>ETHICS 101</option><option>STS 100</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Subject Title</label>
+          <input id="rs-title" placeholder="e.g. Introduction to Computing"/>
+        </div>
+        <div class="field">
+          <label>Teacher / Instructor</label>
+          <input id="rs-teacher" placeholder="e.g. Ms. Ana Reyes"/>
+        </div>
+        <div class="field">
+          <label>Section</label>
+          <input id="rs-section" placeholder="e.g. BSCS 1A"/>
+        </div>
+        <div class="field">
+          <label>Time From</label>
+          <select id="rs-from">
+            <option>7:00 AM</option><option>7:30 AM</option><option>8:00 AM</option><option selected>8:30 AM</option><option>9:00 AM</option><option>9:30 AM</option><option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option><option>12:00 PM</option><option>12:30 PM</option><option>1:00 PM</option><option>1:30 PM</option><option>2:00 PM</option><option>2:30 PM</option><option>3:00 PM</option><option>3:30 PM</option><option>4:00 PM</option><option>4:30 PM</option><option>5:00 PM</option><option>5:30 PM</option><option>6:00 PM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Time To</label>
+          <select id="rs-to">
+            <option>7:30 AM</option><option>8:00 AM</option><option>8:30 AM</option><option>9:00 AM</option><option selected>9:30 AM</option><option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option><option>12:00 PM</option><option>12:30 PM</option><option>1:00 PM</option><option>1:30 PM</option><option>2:00 PM</option><option>2:30 PM</option><option>3:00 PM</option><option>3:30 PM</option><option>4:00 PM</option><option>4:30 PM</option><option>5:00 PM</option><option>5:30 PM</option><option>6:00 PM</option><option>6:30 PM</option><option>7:00 PM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Days</label>
+          <select id="rs-days">
+            <option>MWF</option><option>TTH</option><option>Mon only</option><option>Tue only</option><option>Wed only</option><option>Thu only</option><option>Fri only</option><option>Sat only</option><option>Daily</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-room-sched')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitRoomSchedule()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Schedule
+      </button>
     </div>
   </div>
 </div>
