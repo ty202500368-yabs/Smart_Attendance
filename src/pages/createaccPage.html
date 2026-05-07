@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/createaccStyles.css">
+  <title>Create Account</title>
+  <style>
+    .waiting-confirmation-modal {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      border-radius: 12px;
+    }
+    .waiting-confirmation-modal.active {
+      display: flex;
+    }
+    .reg-body {
+      position: relative;
+    }
+    .waiting-confirmation-content {
+      background-color: white;
+      border-radius: 12px;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      max-width: 450px;
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .waiting-spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 25px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1d9e75;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .waiting-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1d9e75;
+      margin-bottom: 15px;
+    }
+    .waiting-text {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+    .waiting-dot-animation {
+      display: inline-block;
+    }
+    .waiting-dot-animation::after {
+      content: '.';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
+  </style>
+</head>
+<body style="background-color: rgb(5, 97, 51);">
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">WMSU CCS Student Create Account form with name, WMSU email, password, and COR upload fields</h2>
+
+<div class="reg-wrap">
+  <div class="reg-header">
+    <div style="display:flex;gap:10px;align-items:center;">
+        <img src="/src/components/wmsu.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="WMSU Logo"/>
+        <img src="/src/components/ccs.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="CCS Logo"/>
+    </div>
+    <div class="reg-header-text">
+      <strong>WMSU AttendTrack</strong>
+      <span>Student Registration</span>
+    </div>
+  </div>
+
+  <div class="reg-body" style="background-color: white;">
+    <div class="step-bar">
+      <div class="step active" id="step-1-indicator"><div class="step-dot">1</div><span class="step-label">Account Info</span></div>
+      <div class="step-line"></div>
+      <div class="step inactive" id="step-2-indicator"><div class="step-dot">2</div><span class="step-label">Verification</span></div>
+      <div class="step-line"></div>
+      <div class="step inactive" id="step-3-indicator"><div class="step-dot">3</div><span class="step-label">Confirmation</span></div>
+    </div>
+
+    <!-- STEP 1: Account Info -->
+    <div id="step-1-content" class="step-content active">
+      <div class="progress-section">
+        <div class="progress-label">Form Completion</div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0/7 fields filled</div>
+      </div>
+
+      <div class="reg-section-label">Personal Information</div>
+
+      <div class="form-row triple">
+        <div class="field-group">
+          <label>Last Name</label>
+          <input type="text" id="lname" placeholder="e.g. dela Cruz" oninput="updateProgress()"/>
+        </div>
+        <div class="field-group">
+          <label>First Name </label>
+          <input type="text" id="fname" placeholder="e.g. Juan" oninput="updateProgress()"/>
+        </div>
+        <div class="field-group">
+          <label>Middle Name <span class="opt-badge">Optional</span></label>
+          <input type="text" id="mname" placeholder="e.g. Carlos" oninput="updateProgress()"/>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="reg-section-label">Course</div>
+      <div class="form-row single">
+        <div class="field-group">
+          <label>Select Your Course</label>
+          <select id="course" required oninput="updateProgress()">
+            <option value="">-- Select a course --</option>
+            <option value="IT">Bachelor of Science in Information Technology [1st Year]</option>
+            <option value="IT">Bachelor of Science in Information Technology [2nd Year]</option>
+            <option value="IT">Bachelor of Science in Information Technology [3rd Year]</option>
+            <option value="IT">Bachelor of Science in Information Technology [4th Year]</option>
+            <option value="CS">Bachelor of Science in Computer Science [1st Year]</option>
+            <option value="CS">Bachelor of Science in Computer Science [2nd Year]</option>
+            <option value="CS">Bachelor of Science in Computer Science [3rd Year]</option>
+            <option value="CS">Bachelor of Science in Computer Science [4th Year]</option>
+            <option value="ACT-NT">Associate in Computer Technology - Networking [1st Year]</option>
+            <option value="ACT-NT">Associate in Computer Technology - Networking [2nd Year]</option>
+            <option value="ACT-AD">Associate in Computer Technology - Application Development [1st Year]</option>
+            <option value="ACT-AD">Associate in Computer Technology - Application Development [2nd Year]</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="reg-section-label">WMSU Email Address</div>
+      <div class="form-row single" style="margin-bottom:6px;">
+        <div class="field-group">
+          <label for="email-user">Institutional Email</label>
+          <div class="email-wrap">
+            <input type="text" id="email-user" placeholder="TY202500213@wmsu.edu.ph" maxlength="50" oninput="validateEmail(this);updateProgress()"/>
+            <span class="email-suffix">@wmsu.edu.ph</span>
+          </div>
+          <div id="email-hint" style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;">Use your WMSU-issued student email address</div>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="reg-section-label">Password</div>
+      <div class="form-row">
+        <div class="field-group">
+          <label>Create Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="pw1" placeholder="Minimum 8 characters" maxlength="8" oninput="checkStrength(this.value);updateProgress()"/>
+            <button class="pw-toggle" type="button" onclick="togglePw('pw1',this)" title="Show/hide">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="pw-strength"><div class="pw-strength-bar" id="strength-bar"></div></div>
+          <div class="pw-hint" id="pw-hint-txt">Use letters, numbers, and symbols</div>
+        </div>
+        <div class="field-group">
+          <label>Confirm Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="pw2" placeholder="Re-enter password" maxlength="8" oninput="checkMatch();updateProgress()"/>
+            <button class="pw-toggle" type="button" onclick="togglePw('pw2',this)" title="Show/hide">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div id="match-hint" style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;">&nbsp;</div>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="reg-section-label">Certificate of Registration (COR)</div>
+      <div id="cor-dropzone" class="upload-box" onclick="document.getElementById('cor-file').click()" ondragover="event.preventDefault();this.style.background='rgba(201,168,76,0.13)'" ondragleave="this.style.background=''" ondrop="handleDrop(event)">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </div>
+        <div class="upload-title">Upload your COR</div>
+        <div class="upload-sub">Drag & drop or <span>click to browse</span> — PDF or image</div>
+        <input type="file" id="cor-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFile(this);updateProgress()"/>
+      </div>
+      <div class="file-preview" id="cor-preview">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9b1f33" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span class="file-preview-name" id="file-name-txt">—</span>
+        <button class="file-preview-remove" onclick="removeFile();updateProgress()" title="Remove">×</button>
+      </div>
+
+      <div class="submit-row">
+        <button class="btn-submit" onclick="proceedToVerification()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Proceed to Verification
+        </button>
+      </div>
+
+      <div class="already-text">Already have an account? <a href="/src/pages/LoginPage.html" onclick="sendPrompt('I already have a WMSU AttendTrack account, take me to the sign in page')">Sign in here</a></div>
+    </div>
+
+    <!-- STEP 2: Verification -->
+    <div id="step-2-content" class="step-content" style="display:none;">
+      <div style="text-align: center; padding: 40px 20px;">
+        <div class="spinner" style="margin: 0 auto;"></div>
+        <p style="margin-top: 20px; color: var(--color-text-secondary); font-size: 14px;">Preparing verification...</p>
+      </div>
+    </div>
+
+    <!-- Verification Modal -->
+    <div id="verification-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content verification-modal">
+        <div class="modal-header">
+          <h2>Email Verification</h2>
+          <button class="modal-close" onclick="closeVerificationModal()" title="Close">×</button>
+        </div>
+        <div class="modal-body">
+          <div id="modal-verify-loading" style="display: none;">
+            <div style="text-align: center; padding: 20px;">
+              <div class="spinner" style="margin: 0 auto;"></div>
+              <p style="margin-top: 15px; color: var(--color-text-secondary);">Sending verification code...</p>
+            </div>
+          </div>
+          <div id="modal-verify-content">
+            <div style="text-align: center; margin-bottom: 25px;">
+              <div class="verification-icon" style="margin: 0 auto 15px;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9b1f33" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div class="verification-title">Verification Code Sent</div>
+              <div class="verification-text">A verification code has been sent to:<br><strong id="modal-verify-email-display">loading...</strong></div>
+            </div>
+            <div id="modal-verify-error" style="display: none; background: rgba(226, 75, 74, 0.1); color: #e24b4a; padding: 12px; border-radius: 8px; font-size: 12px; margin-bottom: 15px; border: 1px solid rgba(226, 75, 74, 0.2);"></div>
+            <div class="form-row single">
+              <div class="field-group">
+                <label>Enter Verification Code</label>
+                <input type="text" id="modal-verify-code" placeholder="Enter 6-digit code" maxlength="6" oninput="clearModalVerifyError()"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeVerificationModal()">Cancel</button>
+          <button class="btn-submit" id="modal-verify-btn" onclick="verifyCodeModal()" style="margin-left: 10px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Verify & Continue
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Waiting for Confirmation Modal -->
+    <div id="waiting-confirmation-modal" class="waiting-confirmation-modal">
+      <div class="waiting-confirmation-content">
+        <div class="waiting-spinner"></div>
+        <div class="waiting-title">Confirming Your Account<span class="waiting-dot-animation"></span></div>
+        <p class="waiting-text">Please wait while the admin verifies and confirms your registration. This may take a few moments.</p>
+      </div>
+    </div>
+
+    <!-- STEP 3: Confirmation -->
+    <div id="step-3-content" class="step-content" style="display:none;">
+      <div style="text-align: center; padding: 60px 20px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="confirmation-icon" style="margin-bottom: 30px;">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="confirmation-title" style="font-size: 28px; margin-bottom: 15px;">Account Created Successfully!</div>
+        <p style="font-size: 16px; color: #333; margin-bottom: 30px;">Your registration is complete.</p>
+        <div style="background-color: #f0f8f4; border-left: 4px solid #1d9e75; padding: 20px 25px; border-radius: 8px; max-width: 400px; margin-bottom: 30px;">
+          <p style="font-size: 18px; color: #1d9e75; font-weight: 600; margin: 0;">Waiting for admin to confirm your registration</p>
+          <p style="font-size: 13px; color: #666; margin-top: 10px; margin-bottom: 0;">You will receive an email notification once your account has been approved.</p>
+        </div>
+      </div>
+
+      <div class="submit-row" style="margin-top: 30px;">
+        <button class="btn-submit" onclick="showWaitingConfirmationModal()" style="width: 100%; margin-bottom: 10px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Waiting for Confirmation
+        </button>
+        <a href="../pages/LoginPage.html" style="text-decoration: none; width: 100%;">
+          <button class="btn-submit" style="width: 100%;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Go to Sign In
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/src/js/createAcc.js"></script>
+
+</body>
+</html>

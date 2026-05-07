@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMSU AttendTrack — My QR Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/styles/portal.css">
+<style>
+/* QR page extras */
+.qr-page-wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding-top:10px}
+.qr-main{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:360px;width:100%}
+.qr-card2{background:#fff;border-radius:16px;padding:30px 24px;box-shadow:0 2px 24px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.qr-header-strip{width:100%;background:var(--dark);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.qr-header-logo{width:28px;height:28px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.qr-header-logo img{width:100%;object-fit:contain}
+.qr-header-text{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:#fff}
+
+/* Simple QR pattern using CSS grid */
+.qr-visual{
+  width:200px;height:200px;background:#111;border-radius:10px;
+  display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr);
+  gap:1px;padding:12px;overflow:hidden;
+}
+.qr-cell{border-radius:1px}
+.qr-cell.b{background:#fff}
+.qr-cell.w{background:transparent}
+
+/* Finder pattern corners */
+.qr-corner{width:54px;height:54px;border:5px solid #fff;border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center}
+.qr-corner::after{content:'';width:22px;height:22px;background:#fff;border-radius:2px}
+.qr-svg-wrap{width:200px;height:200px;background:#111;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:center}
+
+.qr-scan-line{position:absolute;left:0;right:0;height:2px;background:rgba(155,43,34,.8);box-shadow:0 0 8px rgba(155,43,34,.6);animation:scanMove 2s linear infinite;top:0}
+@keyframes scanMove{0%{top:0}100%{top:100%}}
+
+.qr-info-side{flex:1;min-width:260px;display:flex;flex-direction:column;gap:14px}
+.info-card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+.info-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#888;margin-bottom:12px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
+.info-row:last-child{border-bottom:none}
+.ir-label{color:#888;font-weight:500}
+.ir-val{font-weight:700;color:#1a1a1a}
+
+.status-card{background:var(--dark);border-radius:12px;padding:18px;color:#fff}
+.sc-title{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#888;margin-bottom:10px}
+.sc-status{display:flex;align-items:center;gap:10px}
+.sc-dot{width:10px;height:10px;border-radius:50%;background:#2e7d50;box-shadow:0 0 6px rgba(46,125,80,.6);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
+.sc-label{font-weight:700;font-size:14px}
+.sc-sub{font-size:12px;color:#aaa;margin-top:4px}
+
+.download-btn{
+  width:100%;padding:13px;background:linear-gradient(135deg,#9b2b22,#c0392b);
+  color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:.2s;letter-spacing:.02em;
+}
+.download-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(155,43,34,.35)}
+
+ /* Logout Modal Styles */
+  .logout-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logout-modal-overlay.active {
+    display: flex;
+  }
+
+  .logout-modal {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    padding: 32px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logout-modal-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .logout-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logout-modal-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: all 0.2s ease;
+  }
+
+  .logout-modal-btn-cancel {
+    background: #f0f0f0;
+    color: #1a1a1a;
+    border: 1px solid #e8e4e0;
+  }
+
+  .logout-modal-btn-cancel:hover {
+    background: #e8e8e8;
+  }
+
+  .logout-modal-btn-confirm {
+    background: #9b1f33;
+    color: white;
+  }
+
+  .logout-modal-btn-confirm:hover {
+    background: #7a1829;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+      <div class="sb-brand-text"><div class="sb-title">AttendTrack</div><div class="sb-sub">Student Portal</div></div>
+    </div>
+    <div class="sb-student">
+      <div class="sb-student-name">Regan Kalnain</div>
+      <div class="sb-student-id">WMSU-2025-001</div>
+      <div class="sb-student-sec">BSCS 1B · CCS Dept.</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-nav-label">Navigation</div>
+      <a href="student-index.html" class="nav-item"><span class="nav-item-icon">🏠</span><span class="nav-item-text">Home</span></a>
+      <a href="student-subjects.html" class="nav-item"><span class="nav-item-icon">📚</span><span class="nav-item-text">My Subjects</span></a>
+      <a href="student-scanner.html" class="nav-item active"><span class="nav-item-icon">⛶</span><span class="nav-item-text">My QR Code</span></a>
+      <a href="student-dashboard.html" class="nav-item"><span class="nav-item-icon">📊</span><span class="nav-item-text">My Attendance</span></a>
+      <a href="student-settings.html" class="nav-item"><span class="nav-item-icon">⚙️</span><span class="nav-item-text">Settings</span></a>
+    </nav>
+    <div class="sb-footer"><div class="sb-logout" onclick="handleLogout()"><span class="nav-item-icon">🚪</span><span>Log Out</span></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="top-bar">
+      <div><div class="tb-page-title">My QR Code</div><div class="tb-breadcrumb">Show this to your teacher for attendance</div></div>
+      <div class="tb-right"><div class="tb-section-chip">🎓 BSCS 1B</div><div class="tb-avatar">RK</div></div>
+    </header>
+    <header class="mobile-topbar">
+      <div class="mtb-brand">
+        <div class="mtb-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+        <div><div class="mtb-title">AttendTrack</div><div class="mtb-sub">Student Portal</div></div>
+      </div>
+      <div class="mtb-chip">🎓 BSCS 1B</div>
+    </header>
+
+    <div class="page-body">
+      <div class="page-content">
+        <div class="qr-page-wrap">
+
+          <!-- QR CARD -->
+          <div class="qr-main">
+            <div class="qr-card2">
+              <div class="qr-header-strip">
+                <div class="qr-header-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+                <div class="qr-header-text">WMSU AttendTrack</div>
+              </div>
+
+              <!-- QR Code visual (CSS-generated) -->
+              <div style="position:relative;width:200px;height:200px">
+                <svg viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg" style="border-radius:10px;background:#111">
+                  <!-- Finder TL -->
+                  <rect x="14" y="14" width="50" height="50" rx="4" fill="white"/>
+                  <rect x="22" y="22" width="34" height="34" rx="2" fill="#111"/>
+                  <rect x="28" y="28" width="22" height="22" rx="1" fill="white"/>
+                  <!-- Finder TR -->
+                  <rect x="136" y="14" width="50" height="50" rx="4" fill="white"/>
+                  <rect x="144" y="22" width="34" height="34" rx="2" fill="#111"/>
+                  <rect x="150" y="28" width="22" height="22" rx="1" fill="white"/>
+                  <!-- Finder BL -->
+                  <rect x="14" y="136" width="50" height="50" rx="4" fill="white"/>
+                  <rect x="22" y="144" width="34" height="34" rx="2" fill="#111"/>
+                  <rect x="28" y="150" width="22" height="22" rx="1" fill="white"/>
+                  <!-- Timing dots -->
+                  <rect x="76" y="76" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="90" y="76" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="104" y="76" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="118" y="76" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="76" y="90" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="104" y="90" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="90" y="104" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="118" y="104" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="76" y="118" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="104" y="118" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="118" y="118" width="8" height="8" rx="1" fill="white"/>
+                  <!-- Bottom-right data -->
+                  <rect x="90" y="136" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="104" y="136" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="118" y="136" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="90" y="150" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="118" y="150" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="90" y="164" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="104" y="164" width="8" height="8" rx="1" fill="white"/>
+                  <rect x="118" y="164" width="8" height="8" rx="1" fill="white"/>
+                  <!-- Scan line overlay -->
+                  <rect x="0" y="0" width="200" height="200" fill="none"/>
+                </svg>
+                <div class="qr-scan-line"></div>
+              </div>
+
+              <div class="qr-name">Regan Kalnain</div>
+              <div class="qr-id">WMSU-2025-001</div>
+              <div class="qr-section">BSCS 1B · CCS Department</div>
+              <div class="qr-note">Present this QR code to your teacher's scanner for attendance recording.</div>
+              <button class="download-btn" onclick="alert('QR Code generated!')">⬇ Generate QR Code</button>
+            </div>
+          </div>
+
+          <!-- INFO SIDE -->
+          <div class="qr-info-side">
+            <div class="status-card">
+              <div class="sc-title">Scan Status</div>
+              <div class="sc-status"><div class="sc-dot"></div><div class="sc-label">Ready to Scan</div></div>
+              <div class="sc-sub">Last scanned: Today, 7:03 AM · CC101 (Computer Programming 1)</div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-title">Student Info</div>
+              <div class="info-row"><span class="ir-label">Name</span><span class="ir-val">Regan Kalnain</span></div>
+              <div class="info-row"><span class="ir-label">Student ID</span><span class="ir-val">WMSU-2025-001</span></div>
+              <div class="info-row"><span class="ir-label">Course</span><span class="ir-val">BSCS</span></div>
+              <div class="info-row"><span class="ir-label">Section</span><span class="ir-val">1B</span></div>
+              <div class="info-row"><span class="ir-label">Year Level</span><span class="ir-val">1st Year</span></div>
+              <div class="info-row"><span class="ir-label">Semester</span><span class="ir-val">1st Semester</span></div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-title">How to Use</div>
+              <div style="font-size:13px;color:#555;line-height:1.7">
+                1. Open this page on your phone.<br>
+                2. Show the QR code to your teacher's scanner.<br>
+                3. Wait for the confirmation beep.<br>
+                4. Your attendance will be recorded automatically.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="student-index.html" class="bnav-tab"><div class="bnav-icon">🏠</div><span>Home</span></a>
+    <a href="student-subjects.html" class="bnav-tab"><div class="bnav-icon">📚</div><span>Subjects</span></a>
+    <a href="student-scanner.html" class="bnav-tab active"><div class="bnav-icon">⛶</div><span>QR Code</span></a>
+    <a href="student-dashboard.html" class="bnav-tab"><div class="bnav-icon">📊</div><span>Attendance</span></a>
+    <a href="student-settings.html" class="bnav-tab"><div class="bnav-icon">⚙️</div><span>Settings</span></a>
+  </nav>
+
+  <!-- LOGOUT CONFIRMATION MODAL -->
+  <div class="logout-modal-overlay" id="logoutModalOverlay">
+    <div class="logout-modal">
+      <div class="logout-modal-icon">🚪</div>
+      <div class="logout-modal-title">Log Out?</div>
+      <div class="logout-modal-text">Are you sure you want to log out? You'll need to sign in again to access your account.</div>
+      <div class="logout-modal-buttons">
+        <button class="logout-modal-btn logout-modal-btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+        <button class="logout-modal-btn logout-modal-btn-confirm" onclick="confirmLogout()">Log Out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function handleLogout() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.add('active');
+}
+
+function closeLogoutModal() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.remove('active');
+}
+
+function confirmLogout() {
+  // Clear session storage
+  sessionStorage.clear();
+  // Redirect to login page
+  window.location.href = 'LoginPage.html';
+}
+
+// Close modal when clicking outside of it
+document.addEventListener('click', function(event) {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  if (event.target === modalOverlay) {
+    closeLogoutModal();
+  }
+});
+</script>
+</body>
+</html>

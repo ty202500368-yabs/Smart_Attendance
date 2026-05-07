@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WMSU ScanTracker · Sub-Admin CS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --maroon:#7b1728;--maroon-d:#5e1120;--maroon-bg:#fdf2f4;--maroon-light:#f8e4e8;
+  --blue:#1b5e8c;--blue-bg:#eef4fa;--blue-light:#daeaf6;
+  --green:#1e7c45;--green-bg:#eaf6ee;
+  --orange:#b95e00;--orange-bg:#fff4e6;
+  --red:#c0392b;--red-bg:#fdf2f0;
+  --purple:#5b3a7e;--purple-bg:#f3eefb;
+  --teal:#0f766e;--teal-bg:#f0fdf9;
+  --cs-color:#7b1728;--cs-bg:#fdf2f4;
+  --it-color:#1b5e8c;--it-bg:#eef4fa;
+  --border:#e5e7eb;--border-2:#d1d5db;
+  --bg:#f7f8fa;--surface:#fff;
+  --text:#1a1d23;--sub:#5a6271;--muted:#9ca3af;
+  --sidebar-w:238px;--topbar-h:56px;
+  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --shadow-md:0 4px 20px rgba(0,0,0,.12);
+  --r:10px;--r-sm:6px;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--bg);}
+a{text-decoration:none;color:inherit;cursor:pointer;}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;}
+input,select,textarea{font-family:inherit;font-size:14px;outline:none;border:1.5px solid var(--border-2);border-radius:var(--r-sm);padding:8px 11px;width:100%;background:#fff;color:var(--text);transition:border .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--maroon);}
+table{border-collapse:collapse;width:100%;}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:13px;}
+th{font-weight:600;color:var(--sub);background:#fafafa;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;}
+tr:last-child td{border-bottom:none;}
+
+/* ── TOPBAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--maroon);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:200;box-shadow:0 2px 10px rgba(100,10,30,.3);}
+.topbar-brand{display:flex;align-items:center;gap:10px;}
+.topbar-logo{display:flex;align-items:center;gap:4px;}
+.topbar-logo img{width:38px;height:38px;object-fit:contain;border-radius:50%;border:2px solid rgba(255,255,255,.25);}
+.topbar-wordmark strong{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#fff;letter-spacing:-.01em;display:block;}
+.topbar-wordmark span{font-size:11px;color:rgba(255,255,255,.65);font-weight:500;letter-spacing:.02em;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.sub-badge{background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.07em;border:1px solid rgba(255,255,255,.3);}
+.avatar-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid rgba(255,255,255,.35);}
+
+/* ── LAYOUT ── */
+.layout{display:flex;margin-top:var(--topbar-h);min-height:calc(100vh - var(--topbar-h));}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);position:fixed;top:var(--topbar-h);bottom:0;left:0;display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.sidebar-user{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.s-avatar{width:40px;height:40px;border-radius:50%;background:var(--maroon);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s-user-name{font-weight:600;font-size:13px;}
+.s-user-role{font-size:11px;color:var(--muted);margin-top:1px;}
+.s-dept-chips{display:flex;gap:5px;margin-top:6px;}
+.s-dept-chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.chip-cs{background:var(--maroon-bg);color:var(--maroon);}
+.chip-it{background:var(--blue-bg);color:var(--blue);}
+.nav-group-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 16px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:var(--r-sm);margin:1px 8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--sub);transition:background .13s,color .13s;position:relative;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--maroon-bg);color:var(--maroon);font-weight:600;}
+.n-icon{width:16px;height:16px;flex-shrink:0;}
+.n-badge{margin-left:auto;background:var(--maroon);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;min-width:20px;text-align:center;}
+.n-badge-blue{background:var(--blue);}
+.n-arrow{margin-left:auto;font-size:16px;color:var(--muted);transition:transform .2s;}
+.nav-item.open .n-arrow{transform:rotate(90deg);}
+.nav-sub{overflow:hidden;max-height:0;transition:max-height .28s ease;}
+.nav-sub.open{max-height:300px;}
+.nav-sub-item{padding:7px 14px 7px 42px;font-size:12.5px;color:var(--sub);cursor:pointer;border-radius:var(--r-sm);margin:1px 8px;transition:background .13s,color .13s;}
+.nav-sub-item:hover{background:var(--bg);color:var(--text);}
+.nav-sub-item.active{color:var(--maroon);font-weight:600;}
+.sidebar-footer{margin-top:auto;padding:12px 16px;border-top:1px solid var(--border);}
+.sidebar-footer a{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);cursor:pointer;padding:7px 8px;border-radius:var(--r-sm);transition:background .13s;}
+.sidebar-footer a:hover{background:var(--bg);color:var(--red);}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);flex:1;padding:24px;min-width:0;}
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+/* ── PAGE HEADER ── */
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.breadcrumb{font-size:11.5px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.breadcrumb span{color:var(--maroon);}
+.page-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--text);}
+.page-sub{font-size:12.5px;color:var(--sub);margin-top:2px;}
+.page-hd-right{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px;margin-bottom:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);}
+.stat-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stat-ico-maroon{background:var(--maroon-bg);color:var(--maroon);}
+.stat-ico-blue{background:var(--blue-bg);color:var(--blue);}
+.stat-ico-green{background:var(--green-bg);color:var(--green);}
+.stat-ico-orange{background:var(--orange-bg);color:var(--orange);}
+.stat-ico-red{background:var(--red-bg);color:var(--red);}
+.stat-num{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;line-height:1;}
+.stat-lbl{font-size:11.5px;color:var(--sub);margin-top:3px;}
+.c-maroon{color:var(--maroon)}.c-blue{color:var(--blue)}.c-green{color:var(--green)}.c-orange{color:var(--orange)}.c-red{color:var(--red)}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden;}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
+.card-title{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;}
+.card-body{padding:16px 18px;}
+.tbl-wrap{overflow-x:auto;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,opacity .15s;}
+.btn-primary{background:var(--maroon);color:#fff;border:1.5px solid var(--maroon);}
+.btn-primary:hover{background:var(--maroon-d);}
+.btn-secondary{background:#fff;color:var(--text);border:1.5px solid var(--border-2);}
+.btn-secondary:hover{background:var(--bg);}
+.btn-ghost{background:transparent;color:var(--sub);border:1.5px solid transparent;}
+.btn-ghost:hover{background:var(--bg);}
+.btn-success{background:var(--green);color:#fff;border:1.5px solid var(--green);}
+.btn-success:hover{opacity:.88;}
+.btn-danger{background:var(--red);color:#fff;border:1.5px solid var(--red);}
+.btn-danger:hover{opacity:.88;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.icon-btn{width:30px;height:30px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:background .13s;}
+.icon-btn-blue{background:var(--blue-bg);color:var(--blue);}
+.icon-btn-blue:hover{background:#c8dff2;}
+.icon-btn-green{background:var(--green-bg);color:var(--green);}
+.icon-btn-green:hover{background:#c2e8d0;}
+.icon-btn-orange{background:var(--orange-bg);color:var(--orange);}
+.icon-btn-orange:hover{background:#ffe4b5;}
+.icon-btn-maroon{background:var(--maroon-bg);color:var(--maroon);}
+.icon-btn-maroon:hover{background:#f5d5da;}
+.tbl-actions{display:flex;gap:5px;align-items:center;}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.search-wrap{display:flex;align-items:center;gap:7px;border:1.5px solid var(--border-2);border-radius:var(--r-sm);padding:7px 11px;background:#fff;flex:1;min-width:180px;max-width:280px;}
+.search-wrap input{border:none;padding:0;background:transparent;font-size:13px;width:100%;}
+.search-wrap input:focus{border:none;}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-blue{background:var(--blue-bg);color:var(--blue);}
+.badge-green{background:var(--green-bg);color:var(--green);}
+.badge-orange{background:var(--orange-bg);color:var(--orange);}
+.badge-red{background:var(--red-bg);color:var(--red);}
+.badge-maroon{background:var(--maroon-bg);color:var(--maroon);}
+.badge-gray{background:#f3f4f6;color:var(--sub);}
+.badge-cs{background:var(--maroon-bg);color:var(--maroon);font-weight:700;}
+.badge-it{background:var(--blue-bg);color:var(--blue);font-weight:700;}
+
+/* ── TOGGLE ── */
+.toggle{width:36px;height:20px;border-radius:10px;background:#d1d5db;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle.on{background:var(--green);}
+.toggle.on::after{left:19px;}
+
+/* ── USER CELL ── */
+.user-cell{display:flex;align-items:center;gap:10px;}
+.u-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;}
+.u-name{font-weight:600;font-size:13px;}
+.u-sub{font-size:11.5px;color:var(--muted);}
+
+/* ── DEPT TABS ── */
+.dept-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.dept-tab{padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:600;background:var(--bg);color:var(--sub);cursor:pointer;border:1.5px solid var(--border);transition:all .15s;display:flex;align-items:center;gap:6px;}
+.dept-tab.active-cs{background:var(--maroon);color:#fff;border-color:var(--maroon);}
+.dept-tab.active-it{background:var(--blue);color:#fff;border-color:var(--blue);}
+.dept-panel{display:none;}
+.dept-panel.visible{display:block;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:var(--r);width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-md);animation:slideUp .2s ease;}
+@keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff;z-index:1;}
+.modal-title{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;}
+.modal-close{width:28px;height:28px;border-radius:6px;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--sub);}
+.modal-close:hover{background:var(--border);}
+.modal-body{padding:20px;}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:#fff;}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-full{grid-column:1/-1;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.03em;}
+
+/* ── STUDENT ROWS (verification list) ── */
+.student-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .13s;}
+.student-row:hover{background:var(--bg);}
+.student-row:last-child{border-bottom:none;}
+.s-info{flex:1;min-width:0;}
+.s-name{font-weight:600;font-size:13.5px;}
+.s-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── PROGRAM TAG (big department pill) ── */
+.prog-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.03em;}
+.prog-cs{background:var(--maroon-bg);color:var(--maroon);border:1.5px solid var(--maroon-light);}
+.prog-it{background:var(--blue-bg);color:var(--blue);border:1.5px solid var(--blue-light);}
+
+/* ── VERIFY CARD ── */
+.verify-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .15s;}
+.verify-card:hover{box-shadow:var(--shadow-md);}
+.verify-cards{display:flex;flex-direction:column;gap:14px;}
+.subject-pill{display:inline-flex;align-items:center;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:12px;font-weight:600;}
+.sp-units{font-weight:400;color:var(--muted);font-size:11px;}
+.cor-attachment{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 14px;cursor:pointer;font-size:12.5px;transition:background .13s;}
+.cor-attachment:hover{background:#eef4fa;}
+.cor-status-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--blue-bg);color:var(--blue);}
+.cor-status-verified{background:var(--green-bg);color:var(--green);}
+
+/* ── ROOM GRID ── */
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.room-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;transition:box-shadow .15s;cursor:pointer;}
+.room-card:hover{box-shadow:var(--shadow-md);}
+.room-card-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.room-name{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;}
+.room-type{font-size:11px;color:var(--muted);margin-top:2px;}
+.room-avail{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.avail-free{background:var(--green-bg);color:var(--green);}
+.avail-busy{background:var(--red-bg);color:var(--red);}
+.avail-partial{background:var(--orange-bg);color:var(--orange);}
+.room-slots{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+.room-slot-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;}
+.slot-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.slot-free{background:var(--green);}
+.slot-busy{background:var(--red);}
+.room-occupancy-bar{height:6px;border-radius:3px;background:#e5e7eb;overflow:hidden;margin-top:8px;}
+.room-occupancy-fill{height:100%;border-radius:3px;transition:width .3s;}
+
+/* ── SCHEDULE TABLE ── */
+.sched-table{min-width:700px;}
+.sched-table th{background:#fafafa;white-space:nowrap;font-size:11px;}
+.sched-table td{font-size:12px;vertical-align:top;}
+.sched-cell-busy{background:var(--maroon-bg);border-left:3px solid var(--maroon);padding:6px 8px;border-radius:4px;font-size:11.5px;}
+.sched-cell-free{color:var(--muted);font-size:11px;text-align:center;padding:4px;}
+
+/* ── PROSPECTUS ── */
+.section-divider{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--maroon);background:var(--maroon-bg);border:1px solid var(--maroon-light,#f5d5da);border-radius:var(--r-sm);padding:6px 14px;margin:18px 0 10px;display:flex;align-items:center;gap:6px;}
+.pros-toggle-arrow{transition:transform .2s;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px;}
+
+/* ── INFO BANNER ── */
+.info-banner{display:flex;align-items:flex-start;gap:10px;border-radius:var(--r-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;}
+.info-blue{background:var(--blue-bg);border:1px solid #c3daf0;color:var(--blue);}
+.info-orange{background:var(--orange-bg);border:1px solid #f5d5a0;color:var(--orange);}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">
+      <img src="/src/components/wmsu.jpeg" alt="WMSU"/>
+      <img src="/src/components/ccs.jpeg" alt="CCS"/>
+    </div>
+    <div class="topbar-wordmark">
+      <strong>WMSU ScanTracker</strong>
+      <span>Sub-Admin Portal · CS Department</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="sub-badge">SUB-ADMIN</div>
+    <div class="avatar-btn">SA</div>
+  </div>
+</header>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-user">
+    <div class="s-avatar">SA</div>
+    <div>
+      <div class="s-user-name">Sub Administrator</div>
+      <div class="s-user-role">CCS · WMSU</div>
+      <div class="s-dept-chips">
+        <span class="s-dept-chip chip-cs">BSCS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-group-label">Main Modules</div>
+
+  <div class="nav-item active" id="nav-teachers" onclick="gotoPage('teachers')">
+    <svg class="n-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Teacher List
+    <span class="n-badge">12</span>
+  </div>
+
+  <div class="nav-item" id="nav-students" onclick="toggleSub(this,'sub-students');gotoPage('verification')">
+    <svg class="n-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Student Verification
+    <span class="n-badge" style="background:#b95e00;">7</span>
+    <span class="n-arrow">›</span>
+  </div>
+  <div class="nav-sub" id="sub-students">
+    <div class="nav-sub-item" id="subnav-verification" onclick="gotoPage('verification');setSubActive(this)">Student List</div>
+    <div class="nav-sub-item" id="subnav-subject-verify" onclick="gotoPage('subject-verify');setSubActive(this)">Subject Verification</div>
+  </div>
+
+  <div class="nav-item" id="nav-rooms" onclick="gotoPage('rooms')">
+    <svg class="n-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h6"/></svg>
+    Room Availability
+    <span class="n-badge" style="background:var(--blue);">9</span>
+  </div>
+
+  <div class="nav-item" id="nav-prospectus" onclick="gotoPage('prospectus')">
+    <svg class="n-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Prospectus
+  </div>
+
+  <div class="sidebar-footer">
+    <a onclick="alert('Logging out...')">
+      <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════════════ TEACHER LIST ═══════════════ -->
+<section class="page-section active" id="page-teachers">
+  <div class="page-hd">
+    <div class="page-hd-left">
+      <div class="breadcrumb">Sub-Admin &rsaquo; <span>Teacher List</span></div>
+      <div class="page-title">Teacher List</div>
+      <div class="page-sub">Faculty records for Computer Science Department</div>
+    </div>
+    <div class="page-hd-right">
+      <button class="btn btn-secondary btn-sm" onclick="openModal('modal-history-teacher')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        History
+      </button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-teacher')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Teacher
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-ico stat-ico-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="stat-num c-blue">12</div><div class="stat-lbl">Total Teachers</div></div></div>
+    <div class="stat-card"><div class="stat-ico stat-ico-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="stat-num c-green">10</div><div class="stat-lbl">Active</div></div></div>
+    <div class="stat-card"><div class="stat-ico stat-ico-maroon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><div class="stat-num c-maroon">7</div><div class="stat-lbl">BSCS Faculty</div></div></div>
+    <div class="stat-card"><div class="stat-ico stat-ico-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><div><div class="stat-num c-orange">6</div><div class="stat-lbl">With Advisory</div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Faculty Records
+      </div>
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--muted)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="teacher-search" placeholder="Search name or email..." oninput="filterTeachers()"/>
+        </div>
+        <!-- <select style="width:auto;font-size:12.5px;padding:7px 10px;" id="teacher-dept-filter" onchange="filterTeachers()">
+          <option value="">All Departments</option>
+          <option value="BSCS">BSCS Only</option>
+          <option value="BSIT">BSIT Only</option>
+        </select> -->
+        <button class="btn btn-ghost btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table id="teacher-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Teacher Name</th>
+            <th>WMSU Email</th>
+            <th>Department</th>
+            <th>Advisory Class</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-tbody">
+          <tr data-dept="BSCS">
+            <td>1</td>
+            <td><div class="user-cell"><div class="u-av" style="background:#7b1728">AR</div><div><div class="u-name">Ms. Ana Reyes</div><div class="u-sub">CCS Department</div></div></div></td>
+            <td>areyes@wmsu.edu.ph</td>
+            <td><span class="badge badge-cs">BSCS</span></td>
+            <td><span class="badge badge-maroon">BSCS 1B</span></td>
+            <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            <td><div class="tbl-actions">
+              <button class="icon-btn icon-btn-blue" title="View / Edit" onclick="openModal('modal-teacher-detail')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="icon-btn icon-btn-orange" title="History" onclick="openModal('modal-history-teacher')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+              <button class="icon-btn icon-btn-maroon" title="Reset Password" onclick="openModal('modal-reset-password')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+            </div></td>
+          </tr>
+          <tr data-dept="BSIT">
+            <td>2</td>
+            <td><div class="user-cell"><div class="u-av" style="background:#1b5e8c">JD</div><div><div class="u-name">Mr. Jose Dela Cruz</div><div class="u-sub">CCS Department</div></div></div></td>
+            <td>jdelacruz@wmsu.edu.ph</td>
+            <td><span class="badge badge-it">BSIT</span></td>
+            <td><span class="badge badge-blue">BSIT 2A</span></td>
+            <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            <td><div class="tbl-actions">
+              <button class="icon-btn icon-btn-blue" title="View / Edit" onclick="openModal('modal-teacher-detail')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="icon-btn icon-btn-orange" title="History" onclick="openModal('modal-history-teacher')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+              <button class="icon-btn icon-btn-maroon" title="Reset Password" onclick="openModal('modal-reset-password')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+            </div></td>
+          </tr>
+          <tr data-dept="BSCS">
+            <td>3</td>
+            <td><div class="user-cell"><div class="u-av" style="background:#3d5a2e">MG</div><div><div class="u-name">Ms. Maria Gomez</div><div class="u-sub">CCS Department</div></div></div></td>
+            <td>mgomez@wmsu.edu.ph</td>
+            <td><span class="badge badge-cs">BSCS</span></td>
+            <td><span class="badge badge-orange">BSCS 3A</span></td>
+            <td><div class="toggle" onclick="this.classList.toggle('on')"></div></td>
+            <td><div class="tbl-actions">
+              <button class="icon-btn icon-btn-blue" onclick="openModal('modal-teacher-detail')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="icon-btn icon-btn-orange" onclick="openModal('modal-history-teacher')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+              <button class="icon-btn icon-btn-maroon" onclick="openModal('modal-reset-password')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+            </div></td>
+          </tr>
+          <tr data-dept="BSIT">
+            <td>4</td>
+            <td><div class="user-cell"><div class="u-av" style="background:#5b3a7e">RL</div><div><div class="u-name">Mr. Rico Lim</div><div class="u-sub">CCS Department</div></div></div></td>
+            <td>rlim@wmsu.edu.ph</td>
+            <td><span class="badge badge-it">BSIT</span></td>
+            <td><span class="badge badge-blue">BSIT 1A</span></td>
+            <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            <td><div class="tbl-actions">
+              <button class="icon-btn icon-btn-blue" onclick="openModal('modal-teacher-detail')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="icon-btn icon-btn-orange" onclick="openModal('modal-history-teacher')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+              <button class="icon-btn icon-btn-maroon" onclick="openModal('modal-reset-password')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+            </div></td>
+          </tr>
+          <tr data-dept="BSCS">
+            <td>5</td>
+            <td><div class="user-cell"><div class="u-av" style="background:#0f766e">KS</div><div><div class="u-name">Ms. Karen Santos</div><div class="u-sub">CCS Department</div></div></div></td>
+            <td>ksantos@wmsu.edu.ph</td>
+            <td><span class="badge badge-cs">BSCS</span></td>
+            <td><span class="badge badge-gray">None</span></td>
+            <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            <td><div class="tbl-actions">
+              <button class="icon-btn icon-btn-blue" onclick="openModal('modal-teacher-detail')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="icon-btn icon-btn-orange" onclick="openModal('modal-history-teacher')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+              <button class="icon-btn icon-btn-maroon" onclick="openModal('modal-reset-password')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+            </div></td>
+          </tr>
+          <tr data-dept="BSIT">
+            <td>6</td>
+            <td><div class="user-cell"><div class="u-av" style="background:#c96a10">BM</div><div><div class="u-name">Mr. Ben Macaraeg</div><div class="u-sub">CCS Department</div></div></div></td>
+            <td>bmacaraeg@wmsu.edu.ph</td>
+            <td><span class="badge badge-it">BSIT</span></td>
+            <td><span class="badge badge-blue">BSIT 3B</span></td>
+            <td><div class="toggle on" onclick="this.classList.toggle('on')"></div></td>
+            <td><div class="tbl-actions">
+              <button class="icon-btn icon-btn-blue" onclick="openModal('modal-teacher-detail')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="icon-btn icon-btn-orange" onclick="openModal('modal-history-teacher')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+              <button class="icon-btn icon-btn-maroon" onclick="openModal('modal-reset-password')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STUDENT VERIFICATION ═══════════════ -->
+<section class="page-section" id="page-verification">
+  <div class="page-hd">
+    <div class="page-hd-left">
+      <div class="breadcrumb">Sub-Admin &rsaquo; Student Verification &rsaquo; <span>Verification List</span></div>
+      <div class="page-title">Student Verification</div>
+      <div class="page-sub">Review and verify student enrollment BSCS department</div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-ico stat-ico-maroon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><div class="stat-num c-maroon">4</div><div class="stat-lbl">BSCS Students</div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Student List by Department
+      </div>
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="student-search" placeholder="Search student..." oninput="filterStudentRows()"/>
+        </div>
+        <select style="width:auto;font-size:12.5px;padding:7px 10px;" id="status-filter" onchange="filterStudentRows()">
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Verified">Verified</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-body" style="padding-bottom:0;padding-top:14px;">
+      <div class="dept-tabs">
+        <div class="dept-tab active-cs" id="dtab-bscs" onclick="switchVerifDept(this,'dept-bscs','cs')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          BSCS — Computer Science
+        </div>
+        <!-- <div class="dept-tab" id="dtab-bsit" onclick="switchVerifDept(this,'dept-bsit','it')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16V7a2 2 0 00-2-2H6a2 2 0 00-2 2v9m16 0H4m16 0l1.28 2.55a1 1 0 01-.9 1.45H3.62a1 1 0 01-.9-1.45L4 16"/></svg>
+          BSIT — Information Technology
+        </div> -->
+      </div>
+    </div>
+
+    <!-- BSCS Students -->
+    <div id="dept-bscs" class="dept-panel visible" style="padding-bottom:6px;">
+      <div style="padding:6px 18px 8px;font-size:11px;font-weight:700;color:var(--maroon);letter-spacing:.08em;text-transform:uppercase;background:var(--maroon-bg);border-bottom:1px solid var(--maroon-light);">
+        🎓 Bachelor of Science in Computer Science (BSCS)
+      </div>
+      <div id="bscs-list">
+        <div class="student-row" data-program="BSCS" data-status="Pending" onclick="openStudentModal({name:'Regan Kalnain',id:'WMSU-2025-001',section:'BSCS 1B',program:'BSCS',email:'rkalnain@wmsu.edu.ph',status:'Pending',subjects:['CC 100','Math 100','GE 1','NSTP 1','PE 1']})">
+          <div class="u-av" style="background:#7b1728;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">RK</div>
+          <div class="s-info">
+            <div class="s-name">Regan Kalnain</div>
+            <div class="s-meta">WMSU-2025-001 · BSCS 1B · rkalnain@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-cs">BSCS</span>
+          <span class="badge badge-orange">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Pending
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+        <div class="student-row" data-program="BSCS" data-status="Verified" onclick="openStudentModal({name:'Marco Salazar',id:'WMSU-2025-002',section:'BSCS 2A',program:'BSCS',email:'msalazar@wmsu.edu.ph',status:'Verified',subjects:['CS 111','CS 121','Math 103','GE 3']})">
+          <div class="u-av" style="background:#3d5a2e;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">MS</div>
+          <div class="s-info">
+            <div class="s-name">Marco Salazar</div>
+            <div class="s-meta">WMSU-2025-002 · BSCS 2A · msalazar@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-cs">BSCS</span>
+          <span class="badge badge-green">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Verified
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+        <div class="student-row" data-program="BSCS" data-status="Pending" onclick="openStudentModal({name:'Juan Bautista',id:'WMSU-2025-006',section:'BSCS 3B',program:'BSCS',email:'jbautista@wmsu.edu.ph',status:'Pending',subjects:['CS 130','CS 134','ETHICS 101','CS 140']})">
+          <div class="u-av" style="background:#5b3a7e;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">JB</div>
+          <div class="s-info">
+            <div class="s-name">Juan Bautista</div>
+            <div class="s-meta">WMSU-2025-006 · BSCS 3B · jbautista@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-cs">BSCS</span>
+          <span class="badge badge-orange">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Pending
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+        <div class="student-row" data-program="BSCS" data-status="Verified" onclick="openStudentModal({name:'Sofia Reyes',id:'WMSU-2025-009',section:'BSCS 4A',program:'BSCS',email:'sreyes@wmsu.edu.ph',status:'Verified',subjects:['CS 143','HIST 100','STS 100']})">
+          <div class="u-av" style="background:#0f766e;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">SR</div>
+          <div class="s-info">
+            <div class="s-name">Sofia Reyes</div>
+            <div class="s-meta">WMSU-2025-009 · BSCS 4A · sreyes@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-cs">BSCS</span>
+          <span class="badge badge-green">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Verified
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BSIT Students -->
+    <div id="dept-bsit" class="dept-panel" style="padding-bottom:6px;">
+      <div style="padding:6px 18px 8px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;background:var(--blue-bg);border-bottom:1px solid var(--blue-light);">
+        💻 Bachelor of Science in Information Technology (BSIT)
+      </div>
+      <div id="bsit-list">
+        <div class="student-row" data-program="BSIT" data-status="Rejected" onclick="openStudentModal({name:'Jasmir Saddalani',id:'WMSU-2025-003',section:'BSIT 1A',program:'BSIT',email:'jsaddalani@wmsu.edu.ph',status:'Rejected',subjects:['IT 111','Math 111','GE 1','NSTP 1']})">
+          <div class="u-av" style="background:#c0392b;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">JS</div>
+          <div class="s-info">
+            <div class="s-name">Jasmir Saddalani</div>
+            <div class="s-meta">WMSU-2025-003 · BSIT 1A · jsaddalani@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-it">BSIT</span>
+          <span class="badge badge-red">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Rejected
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+        <div class="student-row" data-program="BSIT" data-status="Verified" onclick="openStudentModal({name:'Aries Cabato',id:'WMSU-2025-004',section:'BSIT 2B',program:'BSIT',email:'acabato@wmsu.edu.ph',status:'Verified',subjects:['IT 211','IT 212','GE 3','Elec 1']})">
+          <div class="u-av" style="background:#5b3a7e;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">AC</div>
+          <div class="s-info">
+            <div class="s-name">Aries Cabato</div>
+            <div class="s-meta">WMSU-2025-004 · BSIT 2B · acabato@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-it">BSIT</span>
+          <span class="badge badge-green">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Verified
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+        <div class="student-row" data-program="BSIT" data-status="Pending" onclick="openStudentModal({name:'Lanie Cruz',id:'WMSU-2025-007',section:'BSIT 1B',program:'BSIT',email:'lcruz@wmsu.edu.ph',status:'Pending',subjects:['IT 111','Math 111','GE 1','PE 1']})">
+          <div class="u-av" style="background:#c96a10;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">LC</div>
+          <div class="s-info">
+            <div class="s-name">Lanie Cruz</div>
+            <div class="s-meta">WMSU-2025-007 · BSIT 1B · lcruz@wmsu.edu.ph</div>
+          </div>
+          <span class="prog-pill prog-it">BSIT</span>
+          <span class="badge badge-orange">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Pending
+          </span>
+          <span style="color:var(--muted);font-size:18px;margin-left:4px">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SUBJECT VERIFICATION ═══════════════ -->
+<section class="page-section" id="page-subject-verify">
+  <div class="page-hd">
+    <div class="page-hd-left">
+      <div class="breadcrumb">Sub-Admin &rsaquo; Student Verification &rsaquo; <span>Subject Verification</span></div>
+      <div class="page-title">Subject Verification (COR)</div>
+      <div class="page-sub">Review Certificate of Registration and verify subjects per student by department</div>
+    </div>
+  </div>
+
+  <div class="info-banner info-blue">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div style="line-height:1.6"><strong>COR-Based Verification:</strong> Students submit their <strong>Certificate of Registration (COR)</strong> for subject enrollment verification. Each student is clearly tagged as <span class="prog-pill prog-cs" style="font-size:10px;padding:1px 8px;">BSCS</span> to help you quickly identify their department.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        COR Verification Queue
+      </div>
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input placeholder="Search student or subject..."/>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" style="padding-bottom:0;padding-top:14px;">
+      <div class="dept-tabs">
+        <div class="dept-tab active-cs" id="svtab-bscs" onclick="switchSVDept(this,'sv-bscs','cs')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          BSCS
+        </div>
+        <!-- <div class="dept-tab" id="svtab-bsit" onclick="switchSVDept(this,'sv-bsit','it')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16V7a2 2 0 00-2-2H6a2 2 0 00-2 2v9m16 0H4m16 0l1.28 2.55a1 1 0 01-.9 1.45H3.62a1 1 0 01-.9-1.45L4 16"/></svg>
+          BSIT
+        </div> -->
+      </div>
+    </div>
+
+    <!-- BSCS Verification -->
+    <div id="sv-bscs" class="dept-panel visible" style="padding:16px;">
+      <div style="font-size:11px;font-weight:700;color:var(--maroon);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;">BSCS — Computer Science Students</div>
+      <div class="verify-cards">
+        <div class="verify-card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="prog-pill prog-cs">BSCS</span>
+                <span class="badge badge-orange" style="font-size:10px;">Pending</span>
+              </div>
+              <div style="font-weight:700;font-size:14px;">Regan Kalnain <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 1B · WMSU-2025-001</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--muted);">Submitted: May 3, 2025 · 9:14 AM</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="subject-pill">CC 100 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">Math 100 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">GE 1 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">NSTP 1 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">PE 1 <span class="sp-units">2 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;align-items:flex-start;">
+              <button class="btn btn-ghost btn-sm" onclick="openModal('modal-cor-view')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                View COR
+              </button>
+              <button class="btn btn-success btn-sm" onclick="approveCard(this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                Verify All
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="rejectCard(this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Reject
+              </button>
+            </div>
+          </div>
+          <div class="cor-attachment" onclick="openModal('modal-cor-view')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-001_Kalnain.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 312 KB · PDF</span>
+            <span class="cor-status-badge">NEW</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;color:var(--blue)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+        <div class="verify-card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="prog-pill prog-cs">BSCS</span>
+                <span class="badge badge-orange" style="font-size:10px;">Pending</span>
+              </div>
+              <div style="font-weight:700;font-size:14px;">Juan Bautista <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSCS 3B · WMSU-2025-006</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--muted);">Submitted: May 4, 2025 · 11:00 AM</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="subject-pill">CS 130 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">CS 134 <span class="sp-units">4 u</span></span>
+                <span class="subject-pill">ETHICS 101 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">CS 140 <span class="sp-units">3 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;align-items:flex-start;">
+              <button class="btn btn-ghost btn-sm" onclick="openModal('modal-cor-view')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                View COR
+              </button>
+              <button class="btn btn-success btn-sm" onclick="approveCard(this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                Verify All
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="rejectCard(this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Reject
+              </button>
+            </div>
+          </div>
+          <div class="cor-attachment" onclick="openModal('modal-cor-view')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-006_Bautista.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 245 KB · PDF</span>
+            <span class="cor-status-badge">NEW</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;color:var(--blue)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BSIT Verification -->
+    <div id="sv-bsit" class="dept-panel" style="padding:16px;">
+      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;">BSIT — Information Technology Students</div>
+      <div class="verify-cards">
+        <div class="verify-card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="prog-pill prog-it">BSIT</span>
+                <span class="badge badge-orange" style="font-size:10px;">Pending</span>
+              </div>
+              <div style="font-weight:700;font-size:14px;">Lanie Cruz <span style="font-weight:500;color:var(--muted);font-size:12px;">· BSIT 1B · WMSU-2025-007</span></div>
+              <div style="margin-top:4px;font-size:12px;color:var(--muted);">Submitted: May 3, 2025 · 8:30 AM</div>
+              <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="subject-pill">IT 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">Math 111 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">GE 1 <span class="sp-units">3 u</span></span>
+                <span class="subject-pill">PE 1 <span class="sp-units">2 u</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;align-items:flex-start;">
+              <button class="btn btn-ghost btn-sm" onclick="openModal('modal-cor-view')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                View COR
+              </button>
+              <button class="btn btn-success btn-sm" onclick="approveCard(this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                Verify All
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="rejectCard(this)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Reject
+              </button>
+            </div>
+          </div>
+          <div class="cor-attachment" onclick="openModal('modal-cor-view')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-weight:600;">COR_WMSU-2025-007_Cruz.pdf</span>
+            <span style="color:var(--muted);font-size:11px;">· 178 KB · PDF</span>
+            <span class="cor-status-badge">NEW</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;color:var(--blue)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ROOM AVAILABILITY ═══════════════ -->
+<section class="page-section" id="page-rooms">
+  <div class="page-hd">
+    <div class="page-hd-left">
+      <div class="breadcrumb">Sub-Admin &rsaquo; <span>Room Availability</span></div>
+      <div class="page-title">Room Availability</div>
+      <div class="page-sub">Real-time room occupancy status — 7:00 AM to 7:00 PM</div>
+    </div>
+    <div class="page-hd-right">
+      <select style="width:auto;font-size:12.5px;padding:8px 12px;border:1.5px solid var(--border-2);border-radius:var(--r-sm);" id="room-day-filter" onchange="renderRooms()">
+        <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option selected>Thursday</option><option>Friday</option><option>Saturday</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-ico stat-ico-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><rect x="5" y="3" width="14" height="18" rx="1"/><circle cx="15" cy="12" r="1"/></svg></div><div><div class="stat-num c-green" id="stat-free">4</div><div class="stat-lbl">Rooms Available</div></div></div>
+    <div class="stat-card"><div class="stat-ico" style="background:var(--red-bg);color:var(--red)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><rect x="5" y="3" width="14" height="18" rx="1"/><circle cx="15" cy="12" r="1"/></svg></div><div><div class="stat-num c-red" id="stat-busy">3</div><div class="stat-lbl">Rooms Occupied</div></div></div>
+    <div class="stat-card"><div class="stat-ico stat-ico-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><rect x="5" y="3" width="14" height="18" rx="1"/><circle cx="15" cy="12" r="1"/></svg></div><div><div class="stat-num c-orange" id="stat-partial">2</div><div class="stat-lbl">Partially Busy</div></div></div>
+    <div class="stat-card"><div class="stat-ico stat-ico-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="stat-num c-blue">9</div><div class="stat-lbl">Total Rooms</div></div></div>
+  </div>
+
+  <!-- Legend -->
+  <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;"><div style="width:12px;height:12px;border-radius:3px;background:var(--green);"></div> Available</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;"><div style="width:12px;height:12px;border-radius:3px;background:var(--red);"></div> Occupied</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;"><div style="width:12px;height:12px;border-radius:3px;background:var(--orange);"></div> Partial</div>
+  </div>
+
+  <div class="room-grid" id="room-grid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- Schedule Table View -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Room Schedule Overview
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="sched-table">
+        <thead>
+          <tr>
+            <th style="min-width:110px;">Room</th>
+            <th>7–8 AM</th>
+            <th>8–9 AM</th>
+            <th>9–10 AM</th>
+            <th>10–11 AM</th>
+            <th>11–12 PM</th>
+            <th>12–1 PM</th>
+            <th>1–2 PM</th>
+            <th>2–3 PM</th>
+            <th>3–4 PM</th>
+            <th>4–5 PM</th>
+          </tr>
+        </thead>
+        <tbody id="sched-table-body">
+          <!-- Rendered by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PROSPECTUS ═══════════════ -->
+<section class="page-section" id="page-prospectus">
+  <div class="page-hd">
+    <div class="page-hd-left">
+      <div class="breadcrumb">Sub-Admin &rsaquo; <span>Prospectus</span></div>
+      <div class="page-title">Curriculum / Prospectus</div>
+      <div class="page-sub">Select a program to view its curriculum</div>
+    </div>
+    <div class="page-hd-right">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Add Subject</button>
+    </div>
+  </div>
+
+  <!-- Program Buttons -->
+  <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+    <button onclick="gotoPage('pros-bscs')" style="flex:1;min-width:200px;display:flex;align-items:center;gap:14px;padding:20px 24px;background:#fff;border:2px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .18s;text-align:left;font-family:'DM Sans',sans-serif;" onmouseover="this.style.borderColor='var(--maroon)';this.style.boxShadow='0 4px 16px rgba(123,23,40,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <div style="width:46px;height:46px;background:var(--maroon-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:var(--text);">BSCS</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Bachelor of Science in Computer Science</div>
+      </div>
+      <svg style="margin-left:auto;color:var(--muted);flex-shrink:0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <!-- Quick Overview Card -->
+  <div class="card">
+    <div class="card-hd" style="cursor:pointer;user-select:none;" onclick="(function(el){var body=document.getElementById('pros-overview-body');var arrow=el.querySelector('.pros-toggle-arrow');var open=body.style.display==='block';body.style.display=open?'none':'block';arrow.style.transform=open?'rotate(0deg)':'rotate(90deg)'})(this)">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Program Overview
+      </div>
+      <svg class="pros-toggle-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;color:var(--muted);transform:rotate(0deg)"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div id="pros-overview-body" style="display:none;">
+      <div style="padding:0 20px 16px;display:flex;gap:24px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:12px 0 8px;">BSCS — Computer Science</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:var(--bg);border-radius:6px;"><span>Total Units</span><strong>157</strong></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:var(--bg);border-radius:6px;"><span>Lec Hours</span><strong>115</strong></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:var(--bg);border-radius:6px;"><span>Lab Hours</span><strong>90</strong></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:var(--bg);border-radius:6px;"><span>Year Levels</span><strong>4 Years</strong></div>
+            <button onclick="gotoPage('pros-bscs')" class="btn btn-primary btn-sm" style="margin-top:6px;width:100%;justify-content:center;">View Full BSCS Curriculum →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PROSPECTUS — BSCS ═══════════════ -->
+<section class="page-section" id="page-pros-bscs">
+  <div class="page-hd">
+    <div>
+      <div class="breadcrumb"><span onclick="gotoPage('prospectus')" style="cursor:pointer;color:var(--maroon)">Sub-Admin › Prospectus</span> &rsaquo; <span>BSCS</span></div>
+      <div class="page-title">BSCS Curriculum</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-ghost btn-sm" onclick="gotoPage('prospectus')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Add Subject</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> BSCS — Bachelor of Science in Computer Science (2018-2019)</div></div>
+    <div class="card-body">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">In compliance with CHED Memorandum Order No. 25, s. 2015. Effective S.Y. 2018-2019.</p>
+
+      <div class="section-divider">First Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CC 100</td><td>Introduction to Computing</td><td>2</td><td>3</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 101</td><td>Computer Programming 1</td><td>3</td><td>3</td><td>4</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CAS 101</td><td>Purposive Communication</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>MATH 100</td><td>Mathematics in the Modern World</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>US 101</td><td>Understanding the Self</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>FIL 101</td><td>Komunikasyon sa Akademikong Filipino</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PE 101</td><td>Physical Education 1</td><td>—</td><td>—</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>NSTP 1</td><td>National Service Training Program 1</td><td>—</td><td>—</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>EUTH A</td><td>Euthenics A</td><td>—</td><td>—</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>17 Lec · 6 Lab</td><td>26 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">First Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 111</td><td>Discrete Structures 1</td><td>3</td><td>0</td><td>3</td><td>MATH 100</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 102</td><td>Computer Programming 2</td><td>3</td><td>3</td><td>4</td><td>CC 101</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>MATH 103</td><td>Calculus 1</td><td>3</td><td>0</td><td>3</td><td>MMW</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CW 101</td><td>The Contemporary World</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>STS 100</td><td>Science, Technology and Society</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>FIL 102</td><td>Retorika</td><td>3</td><td>0</td><td>3</td><td>FIL 101</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PE 102</td><td>Physical Education 2</td><td>—</td><td>—</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>NSTP 2</td><td>National Service Training Program 2</td><td>—</td><td>—</td><td>3</td><td>NSTP 1</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>EUTH B</td><td>Euthenics B</td><td>—</td><td>—</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>18 Lec · 3 Lab</td><td>26 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Second Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 121</td><td>Object-Oriented Programming</td><td>3</td><td>3</td><td>4</td><td>CC 102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 123</td><td>Discrete Structures 2</td><td>3</td><td>0</td><td>3</td><td>CS 111</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 125</td><td>Digital Design</td><td>3</td><td>3</td><td>4</td><td>CS 111</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 127</td><td>Human Computer Interaction</td><td>0</td><td>3</td><td>1</td><td>CC 102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 103</td><td>Data Structures and Algorithms</td><td>3</td><td>3</td><td>4</td><td>CC 102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>MATH 104</td><td>Calculus 2</td><td>3</td><td>0</td><td>3</td><td>MATH 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>LIT 101</td><td>Philippine Literature</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PE 103</td><td>Physical Education 3</td><td>—</td><td>—</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>18 Lec · 12 Lab</td><td>24 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Second Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 120</td><td>Architecture and Organization</td><td>3</td><td>3</td><td>4</td><td>CS 111, CC 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 122</td><td>Design and Analysis of Algorithms</td><td>3</td><td>0</td><td>3</td><td>CS 111, CC 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 124</td><td>Programming Languages</td><td>2</td><td>3</td><td>3</td><td>CC 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 126</td><td>Networks and Communications</td><td>2</td><td>3</td><td>3</td><td>CC 102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 128</td><td>CS Elective 1</td><td>2</td><td>3</td><td>3</td><td>2nd Year Standing</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 104</td><td>Information Management</td><td>3</td><td>3</td><td>4</td><td>CS 121</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PE 104</td><td>Physical Education 4</td><td>—</td><td>—</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>15 Lec · 15 Lab</td><td>22 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Third Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 131</td><td>Automata Theory and Formal Languages</td><td>3</td><td>0</td><td>3</td><td>CS 122, CS 124</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 133</td><td>Information Assurance and Security</td><td>2</td><td>0</td><td>2</td><td>CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 135</td><td>Advanced Database Systems</td><td>3</td><td>3</td><td>4</td><td>CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 137</td><td>Software Engineering 1</td><td>2</td><td>3</td><td>3</td><td>CS 121, CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 139</td><td>Web Programming and Development</td><td>3</td><td>3</td><td>4</td><td>CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 140</td><td>CS Elective 2</td><td>2</td><td>3</td><td>3</td><td>3rd Year Standing</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 105</td><td>Application Development and Emerging Technologies</td><td>2</td><td>3</td><td>3</td><td>CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>17 Lec · 15 Lab</td><td>22 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Third Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 130</td><td>CS Thesis 1</td><td>3</td><td>0</td><td>3</td><td>3rd Year Standing</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 132</td><td>Software Engineering 2</td><td>2</td><td>3</td><td>3</td><td>CS 137</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 134</td><td>Operating Systems</td><td>3</td><td>3</td><td>4</td><td>CS 120</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 136</td><td>Modeling and Simulation</td><td>2</td><td>3</td><td>3</td><td>CS 131</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CS 138</td><td>CS Elective 3</td><td>2</td><td>3</td><td>3</td><td>3rd Year Standing</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>ETHICS 101</td><td>Ethics</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>15 Lec · 12 Lab</td><td>19 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Third Year · Summer</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 141</td><td>Practicum / Industry Immersion</td><td>0</td><td>27</td><td>3</td><td>Incoming Graduating</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>0 Lec · 27 Lab</td><td>3 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Fourth Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 143</td><td>Thesis 2</td><td>3</td><td>0</td><td>3</td><td>CS 130</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>HIST 100</td><td>Life and Works of Rizal </td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>6 Lec · 0 Lab</td><td>6 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Fourth Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 142</td><td>Social Issues and Professional Practice</td><td>3</td><td>0</td><td>3</td><td>CS 132</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>        
+        <tr><td>HIST 101</td><td>Reading in Philippine History</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>A&H 100</td><td>Art Appreciation</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>9 Lec · 0 Lab</td><td>9 Units</td><td></td></tr>
+      </tbody></table></div>
+      
+      <div style="background:var(--maroon);color:#fff;text-align:center;padding:12px 20px;border-radius:var(--r-sm);margin-top:20px;font-family:Sora,sans-serif;font-weight:700;font-size:15px;">
+        GRAND TOTAL: 115 Lec Hours · 90 Lab Hours · 157 Units
+      </div>
+      <br>
+
+      <!-- 2023-2024 curriculum for bscs -->
+      <div class="card">
+    <div class="card-hd"><div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> BSCS — Bachelor of Science in Computer Science (2023-2024)</div></div>
+    <div class="card-body">
+
+      <div class="section-divider">First Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CC 100</td><td>Introduction to Computing</td><td>2</td><td>1</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 101</td><td>Computer Programming 1</td><td>3</td><td>1</td><td>4</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CAS 101</td><td>Purposive Communication</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>MATH 100</td><td>Mathematics in the Modern World</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>HIST 100</td><td>Life and Works of Rizal</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>US 101</td><td>Understanding the Self</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>        
+        <tr><td>PATHFIT 1</td><td>Movement Competency Training</td><td>2</td><td>0</td><td>2</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>NSTP 1</td><td>CWTS 1 /LTS 1 /ROTC 1 </td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>25 Lec · 2 Lab</td><td>27 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">First Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CS 102</td><td>Computer Programming 2</td><td>3</td><td>1</td><td>4</td><td>CC 101</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>OOP 112</td><td>Object-Oriented Programming</td><td>2</td><td>1</td><td>3</td><td>CC 101</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>WD 114</td><td>Web Development 1</td><td>2</td><td>1</td><td>3</td><td>CC 101</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>HCI 116</td><td>Human Computer Interaction</td><td>3</td><td>0</td><td>3</td><td>CC 101</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>DS 118</td><td>Discrete Structure 2</td><td>3</td><td>0</td><td>3</td><td>DS 111</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>HIST 101</td><td>Reading in philippine History</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>STS 100</td><td>Science, Technology and Society</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PATHFIT 2</td><td>Exercise-Based Fitness Activities</td><td>2</td><td>0</td><td>2</td><td>PATHFIT 1</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>NSTP 2</td><td>CWTS 2 /LTS 2 /ROTC 2 </td><td>3</td><td>0</td><td>3</td><td>NSTP 1</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>24 Lec · 3 Lab</td><td>27 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Second Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CC 103</td><td>Data Structures and Algorithms</td><td>2</td><td>1</td><td>3</td><td>CC 102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CC 104</td><td>Information Management</td><td>2</td><td>1</td><td>3</td><td>CC 102, OOP 112</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>MAD 121</td><td>Mobile Application Development</td><td>2</td><td>1</td><td>3</td><td>CC 102, OOP 112</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>WD 123</td><td>Web Development 2</td><td>2</td><td>1</td><td>3</td><td>WD 114</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>SIPP 125</td><td>Social issues and Professional Practice</td><td>3</td><td>0</td><td>3</td><td>CC 102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>NC 127</td><td>Netwoks and Communication</td><td>2</td><td>1</td><td>3</td><td>CC102</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PATHFIT 3</td><td>Dance 1 / Sports 1/ Martial Arts 1/ Group Exercise 1/ <br>Outdoor and Adventure Activities 1</td><td>2</td><td>0</td><td>2</td><td>PATHFIT 2</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>15 Lec · 5 Lab</td><td>20 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Second Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CC 105</td><td>Application Development and Emerging Technologies</td><td>2</td><td>1</td><td>3</td><td>CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>ACTINT 122</td><td>ACT Internship (320 hours)</td><td>0</td><td>6</td><td>6</td><td>WD 123, SIPP 125</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>AO 124</td><td>Architecture and Organization</td><td>2</td><td>1</td><td>3</td><td>DS 111, CC 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PHILCON</td><td>Philippine Constitution</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CW 101</td><td>The Contemporary World</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PATHFIT 4</td><td>Dance 2 / Sports 2/ Martial Arts 2/ Group Exercise 2/ <br>Outdoor and Adventure Activities 2</td><td>2</td><td>0</td><td>2</td><td>PATHFIT 2</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>12 Lec · 8 Lab</td><td>20 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Second Year · Summer</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>ACL 128</td><td>Algorithm and Complexity</td><td>3</td><td>0</td><td>3</td><td>DS 118, CC 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>PL 129</td><td>Programming Languages</td><td>2</td><td>1</td><td>3</td><td>CC 103</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>STAT 120</td><td>Statistics for Computer Science</td><td>3</td><td>0</td><td>3</td><td>MATH 100</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>        
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>8 Lec · 1 Lab</td><td>9 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Third Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>SE 131</td><td>Software Engineering 1</td><td>2</td><td>1</td><td>3</td><td>CC 105, WD 123</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>ADS 133</td><td>Advance Database Systems</td><td>2</td><td>1</td><td>3</td><td>CC 104</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>ATFL 135</td><td>Automata Theory and Formal Languages</td><td>3</td><td>0</td><td>3</td><td>AC 128, PL 129</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>OS 137</td><td>Operating Systems</td><td>2</td><td>1</td><td>3</td><td>AO 124</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>CALC 139</td><td>Calculus for Computer Science</td><td>3</td><td>0</td><td>3</td><td>MATH 100</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td> </td><td>CS Elective 1</td><td>2</td><td>1</td><td>3</td><td></td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td> </td><td>CS Elective 2</td><td>2</td><td>1</td><td>3</td><td></td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>16 Lec · 5 Lab</td><td>21 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Third Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>ES 130</td><td>Embedded Systems</td><td>2</td><td>1</td><td>3</td><td>OS 137</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>SE 132</td><td>Software Engineering 2</td><td>2</td><td>1</td><td>3</td><td>SE 131</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>IAS 134</td><td>Information Assurance and Security</td><td>2</td><td>0</td><td>2</td><td>CC 104, OS 137</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>TW 136</td><td>Technical Writing for <br> Computer Science</td><td>0</td><td>1</td><td>1</td><td>SE 131, ADS 133</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td> </td><td>CS Elective 3</td><td>2</td><td>1</td><td>3</td><td></td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td> </td><td>GE Elective 1</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td> </td><td>GE Elective 2</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td> </td><td>GE Elective 3</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>        
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>17 Lec · 4 Lab</td><td>21 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Third Year · Summer</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>THESIS 139</td><td>CS Thesis 1</td><td>3</td><td>0</td><td>3</td><td>SE 132, TW 136</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>3 Lec · 0 Lab</td><td>3 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Fourth Year · 1st Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>THESIS 141</td><td>CS Thesis 2</td><td>3</td><td>0</td><td>3</td><td>THESIS 139</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>A&H 100</td><td>Art Appreciation</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>6 Lec · 0 Lab</td><td>6 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div class="section-divider">Fourth Year · 2nd Semester</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Lec Hrs</th><th>Lab Hrs</th><th>Units</th><th>Pre-req</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CSPRAC 142</td><td>Practicum / Industry Immersion (162 Hours)</td><td>0</td><td>3</td><td>3</td><td>THESIS 141</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr><td>ETHICS 101</td><td>Ethics</td><td>3</td><td>0</td><td>3</td><td>None</td><td><button class="btn btn-ghost btn-sm" onclick="openModal('modal-add-subject')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></td></tr>
+        <tr style="font-weight:700;background:#faf8f5"><td colspan="4">TOTAL</td><td>3 Lec · 3 Lab</td><td>6 Units</td><td></td></tr>
+      </tbody></table></div>
+
+      <div style="background:var(--maroon);color:#fff;text-align:center;padding:12px 20px;border-radius:var(--r-sm);margin-top:20px;font-family:Sora,sans-serif;font-weight:700;font-size:15px;">
+        GRAND TOTAL: 115 Lec Hours · 90 Lab Hours · 157 Units
+      </div>
+
+    </div>
+  </div>
+
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ═══ MODAL: Student Detail ═══ -->
+<div class="modal-overlay" id="modal-student-detail">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-hd">
+      <span class="modal-title" id="modal-student-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Student Detail
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-student-detail')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+        <div id="modal-s-av" style="width:52px;height:52px;border-radius:50%;background:var(--maroon);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;">RK</div>
+        <div>
+          <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;" id="modal-s-name">Regan Kalnain</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;" id="modal-s-id">WMSU-2025-001 · BSCS 1B</div>
+          <div style="display:flex;gap:6px;margin-top:6px;" id="modal-s-tags"></div>
+        </div>
+      </div>
+      <div class="form-grid" style="margin-bottom:16px;">
+        <div class="field"><label>Email</label><input id="modal-s-email" readonly style="background:#f9fafb;"/></div>
+        <div class="field"><label>Program</label><input id="modal-s-prog" readonly style="background:#f9fafb;"/></div>
+        <div class="field"><label>Section</label><input id="modal-s-sec" readonly style="background:#f9fafb;"/></div>
+        <div class="field"><label>Current Status</label><input id="modal-s-status" readonly style="background:#f9fafb;"/></div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;">Enrolled Subjects</div>
+      <div id="modal-s-subjects" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-student-detail')">Close</button>
+      <button class="btn btn-danger btn-sm" id="modal-reject-btn" onclick="rejectFromModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Reject
+      </button>
+      <button class="btn btn-success" id="modal-verify-btn" onclick="verifyFromModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Verify Student
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Teacher Detail ═══ -->
+<div class="modal-overlay" id="modal-teacher-detail">
+  <div class="modal" style="max-width:580px;">
+    <div class="modal-hd">
+      <span class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Teacher Profile
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-teacher-detail')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+        <div style="width:52px;height:52px;border-radius:50%;background:#7b1728;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Sora',sans-serif;">AR</div>
+        <div>
+          <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;">Ms. Ana Reyes</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">areyes@wmsu.edu.ph</div>
+          <div style="display:flex;gap:6px;margin-top:6px;"><span class="badge badge-cs">BSCS</span><span class="badge badge-green">Active</span></div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Full Name</label><input value="Ms. Ana Reyes"/></div>
+        <div class="field"><label>Employee ID</label><input value="EMP-2023-012"/></div>
+        <div class="field"><label>Email</label><input value="areyes@wmsu.edu.ph"/></div>
+        <div class="field"><label>Contact</label><input value="09XX-XXX-XXXX"/></div>
+        <div class="field"><label>Department</label>
+          <select><option selected>BSCS</option><option>BSIT</option><option>General Education</option></select>
+        </div>
+        <div class="field"><label>Advisory Class</label><input value="BSCS 1B"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-teacher-detail')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-teacher-detail');alert('Teacher profile saved!')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Add Teacher ═══ -->
+<div class="modal-overlay" id="modal-add-teacher">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Add New Teacher
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-add-teacher')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label>First Name</label><input placeholder="e.g. Maria"/></div>
+        <div class="field"><label>Last Name</label><input placeholder="e.g. Santos"/></div>
+        <div class="field"><label>WMSU Email</label><input type="email" placeholder="name@wmsu.edu.ph"/></div>
+        <div class="field"><label>Employee ID</label><input placeholder="e.g. EMP-2024-042"/></div>
+        <div class="field"><label>Department</label>
+          <select>
+            <option>BSCS</option><option>BSIT</option><option>General Education</option>
+          </select>
+        </div>
+        <div class="field"><label>Advisory Class</label><input placeholder="e.g. BSCS 1A (optional)"/></div>
+        <div class="field"><label>Initial Password</label><input type="password" placeholder="Temporary password"/></div>
+        <div class="field"><label>Confirm Password</label><input type="password" placeholder="Re-enter password"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-teacher')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-add-teacher');alert('Teacher account created!')">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Reset Password ═══ -->
+<div class="modal-overlay" id="modal-reset-password">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-hd">
+      <span class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Password Reset
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-reset-password')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-banner info-orange" style="margin-bottom:16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        You are resetting the password for <strong>Ms. Ana Reyes</strong>.
+      </div>
+      <div class="form-grid">
+        <div class="field form-full"><label>New Password</label><input type="password" placeholder="Enter new password" id="rp-pw1"/></div>
+        <div class="field form-full"><label>Confirm Password</label><input type="password" placeholder="Re-enter new password" id="rp-pw2"/></div>
+        <div class="field form-full">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;font-size:13px;text-transform:none;letter-spacing:0;">
+            <input type="checkbox" onchange="document.getElementById('rp-pw1').value=this.checked?'wmsu@2025':'';document.getElementById('rp-pw2').value=this.checked?'wmsu@2025':'';"/>
+            Use default password: <strong>wmsu@2025</strong>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-reset-password')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-reset-password');alert('Password reset successfully!')">Reset Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: History ═══ -->
+<div class="modal-overlay" id="modal-history-teacher">
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-hd">
+      <span class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Activity History
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-history-teacher')">×</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>Date &amp; Time</th><th>Action</th><th>Teacher</th><th>By</th></tr></thead>
+        <tbody>
+          <tr><td style="font-size:12px;">May 6, 2025 · 09:00</td><td><span class="badge badge-green" style="font-size:10px;">Login</span></td><td style="font-size:12.5px;">Ms. Ana Reyes</td><td style="font-size:12px;color:var(--sub);">Sub Admin</td></tr>
+          <tr><td style="font-size:12px;">May 5, 2025 · 14:30</td><td><span class="badge badge-blue" style="font-size:10px;">Profile Edit</span></td><td style="font-size:12.5px;">Mr. Jose D.</td><td style="font-size:12px;color:var(--sub);">Sub Admin</td></tr>
+          <tr><td style="font-size:12px;">May 4, 2025 · 11:15</td><td><span class="badge badge-orange" style="font-size:10px;">PW Reset</span></td><td style="font-size:12.5px;">Ms. Maria G.</td><td style="font-size:12px;color:var(--sub);">Sub Admin</td></tr>
+          <tr><td style="font-size:12px;">May 3, 2025 · 08:00</td><td><span class="badge badge-maroon" style="font-size:10px;">Created</span></td><td style="font-size:12.5px;">Mr. Rico Lim</td><td style="font-size:12px;color:var(--sub);">Sub Admin</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-history-teacher')">Close</button></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: COR View ═══ -->
+<div class="modal-overlay" id="modal-cor-view">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-hd">
+      <span class="modal-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Certificate of Registration
+      </span>
+      <button class="modal-close" onclick="closeModal('modal-cor-view')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--maroon-bg);border:1.5px dashed var(--maroon);border-radius:var(--r);padding:40px;text-align:center;color:var(--maroon);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <div style="font-weight:700;font-size:14px;">COR_WMSU-2025-001_Kalnain.pdf</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">PDF preview would render here in the live system.</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:16px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/></svg>
+          Download COR
+        </button>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-cor-view')">Close</button></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Room Detail ═══ -->
+<div class="modal-overlay" id="modal-room-detail">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-hd">
+      <span class="modal-title" id="room-modal-title">Room Detail</span>
+      <button class="modal-close" onclick="closeModal('modal-room-detail')">×</button>
+    </div>
+    <div class="modal-body" id="room-modal-body"></div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-room-detail')">Close</button></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const rooms = [
+  {id:'LR1',name:'LR1',type:'Lecture Room',seats:40,schedules:{Monday:[],Tuesday:[{sub:'CC 100',teacher:'Ms. Ana Reyes',section:'BSCS 1B',time:'7:00–9:00 AM'}],Wednesday:[{sub:'CS 111',teacher:'Ms. Karen Santos',section:'BSCS 2A',time:'8:00–10:00 AM'}],Thursday:[{sub:'GE 1',teacher:'Mr. Jose D.',section:'BSIT 2A',time:'10:00–11:30 AM'}],Friday:[],Saturday:[]}},
+  {id:'LR2',name:'LR2',type:'Lecture Room',seats:40,schedules:{Monday:[{sub:'Math 100',teacher:'Mr. Ben M.',section:'BSIT 1A',time:'8:00–10:00 AM'},{sub:'IT 111',teacher:'Mr. Rico Lim',section:'BSIT 1B',time:'1:00–3:00 PM'}],Tuesday:[],Wednesday:[],Thursday:[{sub:'CS 121',teacher:'Ms. Ana Reyes',section:'BSCS 2A',time:'7:00–9:00 AM'}],Friday:[{sub:'GE 3',teacher:'Mr. Jose D.',section:'BSIT 3A',time:'2:00–4:00 PM'}],Saturday:[]}},
+  {id:'LR3',name:'LR3',type:'Lecture Room',seats:35,schedules:{Monday:[],Tuesday:[],Wednesday:[{sub:'ETHICS 101',teacher:'Ms. Karen Santos',section:'BSCS 3B',time:'9:00–10:30 AM'}],Thursday:[],Friday:[],Saturday:[{sub:'NSTP 1',teacher:'Mr. Ben M.',section:'BSIT 1A',time:'8:00–11:00 AM'}]}},
+  {id:'LR4',name:'LR4',type:'Lecture Room',seats:35,schedules:{Monday:[],Tuesday:[{sub:'IT 211',teacher:'Mr. Rico Lim',section:'BSIT 2B',time:'1:00–3:00 PM'}],Wednesday:[],Thursday:[],Friday:[{sub:'CS 130',teacher:'Ms. Maria G.',section:'BSCS 3B',time:'9:00–11:00 AM'}],Saturday:[]}},
+  {id:'LR5',name:'LR5',type:'Lecture Room',seats:35,schedules:{Monday:[{sub:'GE 1',teacher:'Mr. Jose D.',section:'BSCS 1B',time:'10:00–11:30 AM'}],Tuesday:[],Wednesday:[],Thursday:[{sub:'Math 111',teacher:'Mr. Ben M.',section:'BSIT 1B',time:'2:00–4:00 PM'}],Friday:[],Saturday:[]}},
+  {id:'LAB1',name:'LAB 1',type:'Computer Laboratory',seats:30,schedules:{Monday:[{sub:'CC 100 Lab',teacher:'Ms. Ana Reyes',section:'BSCS 1A',time:'1:00–4:00 PM'}],Tuesday:[{sub:'IT 111 Lab',teacher:'Mr. Rico Lim',section:'BSIT 1A',time:'8:00–11:00 AM'},{sub:'CS 121 Lab',teacher:'Ms. Karen Santos',section:'BSCS 2A',time:'1:00–4:00 PM'}],Wednesday:[],Thursday:[{sub:'IT 211 Lab',teacher:'Mr. Ben M.',section:'BSIT 2B',time:'8:00–11:00 AM'}],Friday:[{sub:'CS 134 Lab',teacher:'Ms. Maria G.',section:'BSCS 3A',time:'1:00–4:00 PM'}],Saturday:[]}},
+  {id:'LAB2',name:'LAB 2',type:'Computer Laboratory',seats:30,schedules:{Monday:[],Tuesday:[{sub:'IT 212 Lab',teacher:'Mr. Ben M.',section:'BSIT 2A',time:'1:00–4:00 PM'}],Wednesday:[{sub:'CC 100 Lab',teacher:'Ms. Ana Reyes',section:'BSCS 1B',time:'8:00–11:00 AM'}],Thursday:[],Friday:[{sub:'IT 111 Lab',teacher:'Mr. Rico Lim',section:'BSIT 1B',time:'8:00–11:00 AM'}],Saturday:[]}},
+  {id:'SEM1',name:'Seminar 1',type:'Seminar Room',seats:50,schedules:{Monday:[],Tuesday:[],Wednesday:[{sub:'CS 130',teacher:'Ms. Karen Santos',section:'BSCS 3A',time:'10:00 AM–12:00 PM'}],Thursday:[],Friday:[],Saturday:[]}},
+  {id:'SEM2',name:'Seminar 2',type:'Seminar Room',seats:50,schedules:{Monday:[],Tuesday:[{sub:'IT 212',teacher:'Mr. Jose D.',section:'BSIT 3B',time:'8:00–10:00 AM'}],Wednesday:[],Thursday:[{sub:'CS 143',teacher:'Ms. Maria G.',section:'BSCS 4A',time:'2:00–4:00 PM'}],Friday:[],Saturday:[]}},
+];
+
+const schedSlots = ['7–8 AM','8–9 AM','9–10 AM','10–11 AM','11–12 PM','12–1 PM','1–2 PM','2–3 PM','3–4 PM','4–5 PM'];
+
+// ── NAVIGATION ──
+function gotoPage(id){
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const map={teachers:'nav-teachers',verification:'nav-students','subject-verify':'nav-students',rooms:'nav-rooms'};
+  const nav=document.getElementById(map[id]);
+  if(nav)nav.classList.add('active');
+  if(id==='rooms')renderRooms();
+}
+function toggleSub(el,subId){
+  el.classList.toggle('open');
+  document.getElementById(subId).classList.toggle('open');
+}
+function setSubActive(el){
+  document.querySelectorAll('.nav-sub-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── MODALS ──
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+
+// ── TEACHER FILTER ──
+function filterTeachers(){
+  const q=document.getElementById('teacher-search').value.toLowerCase();
+  const dept=document.getElementById('teacher-dept-filter').value;
+  document.querySelectorAll('#teacher-tbody tr').forEach(row=>{
+    const text=row.textContent.toLowerCase();
+    const rowDept=row.dataset.dept||'';
+    const matchQ=text.includes(q);
+    const matchD=!dept||rowDept===dept;
+    row.style.display=(matchQ&&matchD)?'':'none';
+  });
+}
+
+// ── STUDENT DEPT SWITCH ──
+function switchVerifDept(el,panelId,color){
+  document.querySelectorAll('.dept-tab').forEach(t=>{
+    t.classList.remove('active-cs','active-it');
+  });
+  el.classList.add(color==='cs'?'active-cs':'active-it');
+  document.querySelectorAll('#page-verification .dept-panel').forEach(p=>p.classList.remove('visible'));
+  document.getElementById(panelId).classList.add('visible');
+  filterStudentRows();
+}
+function switchSVDept(el,panelId,color){
+  document.querySelectorAll('#page-subject-verify .dept-tab').forEach(t=>t.classList.remove('active-cs','active-it'));
+  el.classList.add(color==='cs'?'active-cs':'active-it');
+  document.querySelectorAll('#page-subject-verify .dept-panel').forEach(p=>p.classList.remove('visible'));
+  document.getElementById(panelId).classList.add('visible');
+}
+
+// ── STUDENT FILTER ──
+function filterStudentRows(){
+  const q=(document.getElementById('student-search')?.value||'').toLowerCase();
+  const status=document.getElementById('status-filter')?.value||'';
+  document.querySelectorAll('.student-row').forEach(row=>{
+    const matchQ=row.textContent.toLowerCase().includes(q);
+    const matchS=!status||row.dataset.status===status;
+    row.style.display=(matchQ&&matchS)?'':'none';
+  });
+}
+
+// ── STUDENT MODAL ──
+let currentStudentData=null;
+function openStudentModal(data){
+  currentStudentData=data;
+  const initials=data.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  const avEl=document.getElementById('modal-s-av');
+  avEl.textContent=initials;
+  avEl.style.background=data.program==='BSCS'?'#7b1728':'#1b5e8c';
+  document.getElementById('modal-s-name').textContent=data.name;
+  document.getElementById('modal-s-id').textContent=data.id+' · '+data.section;
+  document.getElementById('modal-s-email').value=data.email;
+  document.getElementById('modal-s-prog').value=data.program;
+  document.getElementById('modal-s-sec').value=data.section;
+  document.getElementById('modal-s-status').value=data.status;
+  // Tags
+  const tagsEl=document.getElementById('modal-s-tags');
+  const progClass=data.program==='BSCS'?'prog-cs':'prog-it';
+  const statusBadge=data.status==='Verified'?'badge-green':data.status==='Rejected'?'badge-red':'badge-orange';
+  tagsEl.innerHTML=`<span class="prog-pill ${progClass}">${data.program}</span><span class="badge ${statusBadge}">${data.status}</span>`;
+  // Subjects
+  const subEl=document.getElementById('modal-s-subjects');
+  subEl.innerHTML=data.subjects.map(s=>`<span class="subject-pill">${s}</span>`).join('');
+  // Show/hide buttons based on status
+  const vBtn=document.getElementById('modal-verify-btn');
+  const rBtn=document.getElementById('modal-reject-btn');
+  vBtn.style.display=data.status==='Verified'?'none':'';
+  rBtn.style.display=data.status==='Rejected'?'none':'';
+  openModal('modal-student-detail');
+}
+function verifyFromModal(){
+  if(!currentStudentData)return;
+  alert(`✓ ${currentStudentData.name} has been verified as a ${currentStudentData.program} student.`);
+  closeModal('modal-student-detail');
+}
+function rejectFromModal(){
+  if(!currentStudentData)return;
+  if(confirm(`Reject ${currentStudentData.name}'s verification?`)){
+    alert(`✗ ${currentStudentData.name}'s verification has been rejected.`);
+    closeModal('modal-student-detail');
+  }
+}
+
+// ── VERIFY CARDS ──
+function approveCard(btn){
+  const card=btn.closest('.verify-card');
+  card.style.borderColor='var(--green)';
+  card.style.background='var(--green-bg)';
+  btn.parentElement.innerHTML='<span class="badge badge-green" style="font-size:12px;padding:6px 12px;">✓ Verified</span>';
+  alert('Student subjects verified successfully!');
+}
+function rejectCard(btn){
+  const card=btn.closest('.verify-card');
+  if(!confirm('Reject this student\'s COR?'))return;
+  card.style.borderColor='var(--red)';
+  card.style.background='var(--red-bg)';
+  btn.parentElement.innerHTML='<span class="badge badge-red" style="font-size:12px;padding:6px 12px;">✗ Rejected</span>';
+}
+
+// ── ROOMS ──
+function getDay(){return document.getElementById('room-day-filter')?.value||'Thursday';}
+function getBusyness(schedArr){
+  const len=schedArr.length;
+  if(len===0)return'free';
+  if(len===1)return'partial';
+  return'busy';
+}
+function renderRooms(){
+  const day=getDay();
+  const grid=document.getElementById('room-grid');
+  let free=0,busy=0,partial=0;
+  grid.innerHTML=rooms.map(r=>{
+    const scheds=r.schedules[day]||[];
+    const state=getBusyness(scheds);
+    if(state==='free')free++;
+    else if(state==='busy')busy++;
+    else partial++;
+    const pct=Math.round((scheds.length/3)*100);
+    const fillColor=state==='free'?'var(--green)':state==='busy'?'var(--red)':'var(--orange)';
+    const availClass=state==='free'?'avail-free':state==='busy'?'avail-busy':'avail-partial';
+    const availText=state==='free'?'● Available':state==='busy'?'● Occupied':'● Partial';
+    const schedsHtml=scheds.length===0
+      ?`<div style="color:var(--muted);font-size:12px;padding:4px 0;">No scheduled class</div>`
+      :scheds.map(s=>`<div class="room-slot-row"><div class="slot-dot slot-busy"></div><div><span style="font-weight:600;">${s.sub}</span> — ${s.section}<br/><span style="color:var(--muted);font-size:11px;">${s.teacher} · ${s.time}</span></div></div>`).join('');
+    return`<div class="room-card" onclick="openRoomDetail('${r.id}','${day}')">
+      <div class="room-card-hd">
+        <div>
+          <div class="room-name">${r.name}</div>
+          <div class="room-type">${r.type} · ${r.seats} seats</div>
+        </div>
+        <span class="room-avail ${availClass}">${availText}</span>
+      </div>
+      <div class="room-occupancy-bar"><div class="room-occupancy-fill" style="width:${Math.max(pct,scheds.length===0?0:20)}%;background:${fillColor};"></div></div>
+      <div class="room-slots">${schedsHtml}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('stat-free').textContent=free;
+  document.getElementById('stat-busy').textContent=busy;
+  document.getElementById('stat-partial').textContent=partial;
+  renderSchedTable(day);
+}
+function renderSchedTable(day){
+  const tbody=document.getElementById('sched-table-body');
+  const slotHours=[7,8,9,10,11,12,13,14,15,16];
+  tbody.innerHTML=rooms.map(r=>{
+    const scheds=r.schedules[day]||[];
+    const cells=slotHours.map(h=>{
+      const busy=scheds.find(s=>{
+        const startH=parseInt(s.time.split(':')[0]);
+        const endH=parseInt(s.time.split('–')[1]);
+        return h>=startH&&h<endH;
+      });
+      if(busy)return`<td><div class="sched-cell-busy">${busy.sub}<br/><span style="font-size:10px;color:var(--sub)">${busy.section}</span></div></td>`;
+      return`<td><div class="sched-cell-free">—</div></td>`;
+    }).join('');
+    return`<tr><td style="font-weight:600;font-size:13px;">${r.name}<br/><span style="font-weight:400;color:var(--muted);font-size:11px;">${r.type}</span></td>${cells}</tr>`;
+  }).join('');
+}
+function openRoomDetail(roomId,day){
+  const room=rooms.find(r=>r.id===roomId);
+  if(!room)return;
+  const scheds=room.schedules[day]||[];
+  document.getElementById('room-modal-title').innerHTML=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M3 21h18"/><rect x="5" y="3" width="14" height="18" rx="1"/></svg> ${room.name} — ${day}`;
+  const body=document.getElementById('room-modal-body');
+  if(scheds.length===0){
+    body.innerHTML=`<div style="text-align:center;padding:30px;color:var(--muted);"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:10px;opacity:.4"><path d="M3 21h18"/><rect x="5" y="3" width="14" height="18" rx="1"/></svg><p style="font-size:14px;font-weight:600;">No classes on ${day}</p><p style="font-size:12px;margin-top:4px;">${room.name} is fully available</p></div>`;
+  } else {
+    body.innerHTML=`<div style="font-size:12px;color:var(--muted);margin-bottom:14px;">${room.type} · ${room.seats} seats</div>`+
+      scheds.map(s=>`<div style="display:flex;gap:12px;padding:12px;background:var(--maroon-bg);border:1px solid var(--maroon-light);border-radius:var(--r-sm);margin-bottom:10px;">
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:14px;">${s.sub}</div>
+          <div style="font-size:12.5px;color:var(--sub);margin-top:3px;">${s.section} · ${s.teacher}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">⏰ ${s.time}</div>
+        </div>
+      </div>`).join('');
+  }
+  openModal('modal-room-detail');
+}
+
+// Init rooms on load
+document.addEventListener('DOMContentLoaded',()=>renderRooms());
+</script>
+</body>
+</html>

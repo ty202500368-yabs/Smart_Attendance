@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMSU AttendTrack — Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/styles/portal.css">
+<style>
+  /* Logout Modal Styles */
+  .logout-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logout-modal-overlay.active {
+    display: flex;
+  }
+
+  .logout-modal {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    padding: 32px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logout-modal-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .logout-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .logout-modal-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logout-modal-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s ease;
+  }
+
+  .logout-modal-btn-cancel {
+    background: #f0f0f0;
+    color: #1a1a1a;
+    border: 1px solid #e8e4e0;
+  }
+
+  .logout-modal-btn-cancel:hover {
+    background: #e8e8e8;
+  }
+
+  .logout-modal-btn-confirm {
+    background: #9b1f33;
+    color: white;
+  }
+
+  .logout-modal-btn-confirm:hover {
+    background: #7a1829;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+      <div class="sb-brand-text"><div class="sb-title">AttendTrack</div><div class="sb-sub">Student Portal</div></div>
+    </div>
+    <div class="sb-student">
+      <div class="sb-student-name">Regan Kalnain</div>
+      <div class="sb-student-id">WMSU-2025-001</div>
+      <div class="sb-student-sec">BSCS 1B · CCS Dept.</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-nav-label">Navigation</div>
+      <a href="student-index.html" class="nav-item active"><span class="nav-item-icon">🏠</span><span class="nav-item-text">Home</span></a>
+      <a href="student-subjects.html" class="nav-item"><span class="nav-item-icon">📚</span><span class="nav-item-text">My Subjects</span></a>
+      <a href="student-scanner.html" class="nav-item"><span class="nav-item-icon">⛶</span><span class="nav-item-text">My QR Code</span></a>
+      <a href="student-dashboard.html" class="nav-item"><span class="nav-item-icon">📊</span><span class="nav-item-text">My Attendance</span></a>
+      <a href="student-settings.html" class="nav-item"><span class="nav-item-icon">⚙️</span><span class="nav-item-text">Settings</span></a>
+    </nav>
+    <div class="sb-footer"><div class="sb-logout" onclick="handleLogout()"><span class="nav-item-icon">🚪</span><span>Log Out</span></div></div>
+  </aside>
+
+  <div class="main">
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <div><div class="tb-page-title">Home</div><div class="tb-breadcrumb">First Semester · AY 2025–2026</div></div>
+      <div class="tb-right"><div class="tb-section-chip">🎓 BSCS 1B</div><div class="tb-avatar">RK</div></div>
+    </header>
+    <!-- MOBILE TOP BAR -->
+    <header class="mobile-topbar">
+      <div class="mtb-brand">
+        <div class="mtb-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+        <div><div class="mtb-title">AttendTrack</div><div class="mtb-sub">Student Portal</div></div>
+      </div>
+      <div class="mtb-chip">🎓 BSCS 1B</div>
+    </header>
+
+    <div class="page-body">
+      <div class="page-content">
+
+        <!-- HERO -->
+        <div class="home-hero">
+          <div class="home-hero-left">
+            <div class="home-hello">Good morning 👋</div>
+            <div class="home-name">Regan Kalnain</div>
+            <div class="home-info">WMSU-2025-001 · BSCS 1B · First Semester AY 2025–2026</div>
+          </div>
+          <a href="student-scanner.html" class="home-qr-btn">⛶ Show QR</a>
+        </div>
+
+        <!-- KPI STRIP -->
+        <div class="sec-label mb">Your Attendance Summary</div>
+        <div class="kpi-grid" style="margin-bottom:22px">
+          <div class="kpi-card"><div class="kpi-icon g">✅</div><div><div class="kpi-val g">48</div><div class="kpi-lbl">Total Present</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon r">❌</div><div><div class="kpi-val r">4</div><div class="kpi-lbl">Total Absent</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon o">⏰</div><div><div class="kpi-val o">6</div><div class="kpi-lbl">Total Late</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon m">📈</div><div><div class="kpi-val m">83%</div><div class="kpi-lbl">Overall Rate</div></div></div>
+        </div>
+
+        <!-- SUBJECTS TODAY -->
+        <div class="sec-label mb">Today's Subjects</div>
+        <div class="subject-grid" style="margin-bottom:22px">
+          <div class="subject-card">
+            <div class="sc-code">CC101</div>
+            <div class="sc-name">Computer Programming 1</div>
+            <div class="sc-info">7:00 AM – 9:00 AM · LR1</div>
+            <span class="sc-badge ongoing">✅ Present</span>
+          </div>
+          <div class="subject-card">
+            <div class="sc-code">DS111</div>
+            <div class="sc-name">Discrete Structures 1</div>
+            <div class="sc-info">9:00 AM – 10:30 AM · LR2</div>
+            <span class="sc-badge ongoing">🟡 Upcoming</span>
+          </div>
+          <div class="subject-card">
+            <div class="sc-code">WD101</div>
+            <div class="sc-name">Web Development</div>
+            <div class="sc-info">10:30 AM – 12:00 PM · LAB3</div>
+            <span class="sc-badge ongoing">🟡 Upcoming</span>
+          </div>
+          <div class="subject-card">
+            <div class="sc-code">OOP</div>
+            <div class="sc-name">Object-Oriented Programming</div>
+            <div class="sc-info">1:00 PM – 3:00 PM · LAB2</div>
+            <span class="sc-badge ongoing">🟡 Upcoming</span>
+          </div>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="sec-label mb">Quick Actions</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="student-scanner.html" style="text-decoration:none;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 16px rgba(0,0,0,.08);display:flex;align-items:center;gap:10px;font-weight:600;font-size:13px;color:#1a1a1a;border:1px solid #e8e4e0;transition:.15s" onmouseover="this.style.borderColor='#9b2b22'" onmouseout="this.style.borderColor='#e8e4e0'">
+            <span style="font-size:20px">⛶</span> Show My QR Code
+          </a>
+          <a href="student-dashboard.html" style="text-decoration:none;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 16px rgba(0,0,0,.08);display:flex;align-items:center;gap:10px;font-weight:600;font-size:13px;color:#1a1a1a;border:1px solid #e8e4e0;transition:.15s" onmouseover="this.style.borderColor='#9b2b22'" onmouseout="this.style.borderColor='#e8e4e0'">
+            <span style="font-size:20px">📊</span> View Attendance
+          </a>
+          <a href="student-subjects.html" style="text-decoration:none;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 16px rgba(0,0,0,.08);display:flex;align-items:center;gap:10px;font-weight:600;font-size:13px;color:#1a1a1a;border:1px solid #e8e4e0;transition:.15s" onmouseover="this.style.borderColor='#9b2b22'" onmouseout="this.style.borderColor='#e8e4e0'">
+            <span style="font-size:20px">📚</span> My Subjects
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="student-index.html" class="bnav-tab active"><div class="bnav-icon">🏠</div><span>Home</span></a>
+    <a href="student-subjects.html" class="bnav-tab"><div class="bnav-icon">📚</div><span>Subjects</span></a>
+    <a href="student-scanner.html" class="bnav-tab"><div class="bnav-icon">⛶</div><span>QR Code</span></a>
+    <a href="student-dashboard.html" class="bnav-tab"><div class="bnav-icon">📊</div><span>Attendance</span></a>
+    <a href="student-settings.html" class="bnav-tab"><div class="bnav-icon">⚙️</div><span>Settings</span></a>
+  </nav>
+
+  <!-- LOGOUT CONFIRMATION MODAL -->
+  <div class="logout-modal-overlay" id="logoutModalOverlay">
+    <div class="logout-modal">
+      <div class="logout-modal-icon">🚪</div>
+      <div class="logout-modal-title">Log Out?</div>
+      <div class="logout-modal-text">Are you sure you want to log out? You'll need to sign in again to access your account.</div>
+      <div class="logout-modal-buttons">
+        <button class="logout-modal-btn logout-modal-btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+        <button class="logout-modal-btn logout-modal-btn-confirm" onclick="confirmLogout()">Log Out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function handleLogout() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.add('active');
+}
+
+function closeLogoutModal() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.remove('active');
+}
+
+function confirmLogout() {
+  // Clear session storage
+  sessionStorage.clear();
+  // Redirect to login page
+  window.location.href = 'LoginPage.html';
+}
+
+// Close modal when clicking outside of it
+document.addEventListener('click', function(event) {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  if (event.target === modalOverlay) {
+    closeLogoutModal();
+  }
+});
+</script>
+</body>
+</html>

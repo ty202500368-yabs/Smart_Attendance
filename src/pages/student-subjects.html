@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMSU AttendTrack — My Subjects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/styles/portal.css">
+<style>
+.subj-table-wrap{background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.08);overflow:hidden;margin-top:10px}
+.subj-table{width:100%;border-collapse:collapse;font-size:13px}
+.subj-table thead{background:#7b1728;color:#fff}
+.subj-table th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.subj-table td{padding:13px 16px;border-bottom:1px solid #f5f5f5;vertical-align:middle}
+.subj-table tbody tr:last-child td{border-bottom:none}
+.subj-table tbody tr:hover{background:#fafaf9}
+.subj-code{font-weight:700;color:#9b2b22;font-size:12px}
+.subj-name{font-weight:600}
+.subj-sched{font-size:11px;color:#888;margin-top:2px}
+.rate-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.rate-pill.g{background:#e8f5ee;color:#2e7d50}
+.rate-pill.o{background:#fff3e0;color:#c07020}
+.rate-pill.r{background:#fdecea;color:#c0392b}
+.subj-mini-bar{width:80px;height:6px;background:#f0eeec;border-radius:4px;margin-top:4px}
+.subj-mini-fill{height:100%;border-radius:4px}
+.units-badge{display:inline-block;background:#f0eeec;color:#555;font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px}
+@media(max-width:700px){
+  .subj-table th:nth-child(3),.subj-table td:nth-child(3),
+  .subj-table th:nth-child(5),.subj-table td:nth-child(5){display:none}
+}
+/* Logout Modal Styles */
+  .logout-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logout-modal-overlay.active {
+    display: flex;
+  }
+
+  .logout-modal {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    padding: 32px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logout-modal-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .logout-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .logout-modal-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logout-modal-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s ease;
+  }
+
+  .logout-modal-btn-cancel {
+    background: #f0f0f0;
+    color: #1a1a1a;
+    border: 1px solid #e8e4e0;
+  }
+
+  .logout-modal-btn-cancel:hover {
+    background: #e8e8e8;
+  }
+
+  .logout-modal-btn-confirm {
+    background: #9b1f33;
+    color: white;
+  }
+
+  .logout-modal-btn-confirm:hover {
+    background: #7a1829;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+      <div class="sb-brand-text"><div class="sb-title">AttendTrack</div><div class="sb-sub">Student Portal</div></div>
+    </div>
+    <div class="sb-student">
+      <div class="sb-student-name">Regan Kalnain</div>
+      <div class="sb-student-id">WMSU-2025-001</div>
+      <div class="sb-student-sec">BSCS 1B · CCS Dept.</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-nav-label">Navigation</div>
+      <a href="student-index.html" class="nav-item"><span class="nav-item-icon">🏠</span><span class="nav-item-text">Home</span></a>
+      <a href="student-subjects.html" class="nav-item active"><span class="nav-item-icon">📚</span><span class="nav-item-text">My Subjects</span></a>
+      <a href="student-scanner.html" class="nav-item"><span class="nav-item-icon">⛶</span><span class="nav-item-text">My QR Code</span></a>
+      <a href="student-dashboard.html" class="nav-item"><span class="nav-item-icon">📊</span><span class="nav-item-text">My Attendance</span></a>
+      <a href="student-settings.html" class="nav-item"><span class="nav-item-icon">⚙️</span><span class="nav-item-text">Settings</span></a>
+    </nav>
+    <div class="sb-footer"><div class="sb-logout" onclick="handleLogout()"><span class="nav-item-icon">🚪</span><span>Log Out</span></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="top-bar">
+      <div><div class="tb-page-title">My Subjects</div><div class="tb-breadcrumb">First Semester · AY 2025–2026</div></div>
+      <div class="tb-right"><div class="tb-section-chip">🎓 BSCS 1B</div><div class="tb-avatar">RK</div></div>
+    </header>
+    <header class="mobile-topbar">
+      <div class="mtb-brand">
+        <div class="mtb-logo"><img src="/src/components/wmsulogo.svg" alt="WMSU"></div>
+        <div><div class="mtb-title">AttendTrack</div><div class="mtb-sub">Student Portal</div></div>
+      </div>
+      <div class="mtb-chip">🎓 BSCS 1B</div>
+    </header>
+
+    <div class="page-body">
+      <div class="page-content">
+
+        <div class="sec-label mb">Enrolled Subjects — 1st Year, 1st Semester</div>
+
+        <div class="subj-table-wrap">
+          <table class="subj-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Subject</th>
+                <th>Schedule</th>
+                <th>Units</th>
+                <th>Attendance Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="subj-code">DS111</div></td>
+                <td><div class="subj-name">Discrete Structures 1</div><div class="subj-sched">👨‍🏫 Prof. Santos · LR2</div></td>
+                <td><div style="font-size:12px">MWF · 9:00–10:30 AM</div></td>
+                <td><span class="units-badge">3 units</span></td>
+                <td><div><span class="rate-pill g">92%</span><div class="subj-mini-bar"><div class="subj-mini-fill" style="width:92%;background:#2e7d50"></div></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="subj-code">CC101</div></td>
+                <td><div class="subj-name">Computer Programming 1</div><div class="subj-sched">👨‍🏫 Prof. Reyes · LR1</div></td>
+                <td><div style="font-size:12px">TTh · 7:00–9:00 AM</div></td>
+                <td><span class="units-badge">3 units</span></td>
+                <td><div><span class="rate-pill g">88%</span><div class="subj-mini-bar"><div class="subj-mini-fill" style="width:88%;background:#2e7d50"></div></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="subj-code">WD101</div></td>
+                <td><div class="subj-name">Web Development</div><div class="subj-sched">👨‍🏫 Prof. Luna · LAB3</div></td>
+                <td><div style="font-size:12px">MWF · 10:30–12:00 PM</div></td>
+                <td><span class="units-badge">3 units</span></td>
+                <td><div><span class="rate-pill o">72%</span><div class="subj-mini-bar"><div class="subj-mini-fill" style="width:72%;background:#c07020"></div></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="subj-code">OOP</div></td>
+                <td><div class="subj-name">Object-Oriented Programming</div><div class="subj-sched">👨‍🏫 Prof. Dela Cruz · LAB2</div></td>
+                <td><div style="font-size:12px">TTh · 1:00–3:00 PM</div></td>
+                <td><span class="units-badge">3 units</span></td>
+                <td><div><span class="rate-pill g">95%</span><div class="subj-mini-bar"><div class="subj-mini-fill" style="width:95%;background:#2e7d50"></div></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="subj-code">CC100</div></td>
+                <td><div class="subj-name">Introduction to Computing</div><div class="subj-sched">👨‍🏫 Prof. Garcia · LR3</div></td>
+                <td><div style="font-size:12px">MWF · 8:00–9:00 AM</div></td>
+                <td><span class="units-badge">3 units</span></td>
+                <td><div><span class="rate-pill g">85%</span><div class="subj-mini-bar"><div class="subj-mini-fill" style="width:85%;background:#2e7d50"></div></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="subj-code">CC102</div></td>
+                <td><div class="subj-name">Computer Programming 2</div><div class="subj-sched">👨‍🏫 Prof. Tan · LAB1</div></td>
+                <td><div style="font-size:12px">TTh · 3:00–5:00 PM</div></td>
+                <td><span class="units-badge">3 units</span></td>
+                <td><div><span class="rate-pill r">65%</span><div class="subj-mini-bar"><div class="subj-mini-fill" style="width:65%;background:#c0392b"></div></div></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:#888;display:flex;gap:18px;flex-wrap:wrap">
+          <span>Total units enrolled: <strong>18</strong></span>
+          <span>⚠️ <strong>CC102</strong> attendance is below 75% — please attend regularly.</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="student-index.html" class="bnav-tab"><div class="bnav-icon">🏠</div><span>Home</span></a>
+    <a href="student-subjects.html" class="bnav-tab active"><div class="bnav-icon">📚</div><span>Subjects</span></a>
+    <a href="student-scanner.html" class="bnav-tab"><div class="bnav-icon">⛶</div><span>QR Code</span></a>
+    <a href="student-dashboard.html" class="bnav-tab"><div class="bnav-icon">📊</div><span>Attendance</span></a>
+    <a href="student-settings.html" class="bnav-tab"><div class="bnav-icon">⚙️</div><span>Settings</span></a>
+  </nav>
+
+   <!-- LOGOUT CONFIRMATION MODAL -->
+  <div class="logout-modal-overlay" id="logoutModalOverlay">
+    <div class="logout-modal">
+      <div class="logout-modal-icon">🚪</div>
+      <div class="logout-modal-title">Log Out?</div>
+      <div class="logout-modal-text">Are you sure you want to log out? You'll need to sign in again to access your account.</div>
+      <div class="logout-modal-buttons">
+        <button class="logout-modal-btn logout-modal-btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+        <button class="logout-modal-btn logout-modal-btn-confirm" onclick="confirmLogout()">Log Out</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function handleLogout() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.add('active');
+}
+
+function closeLogoutModal() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.remove('active');
+}
+
+function confirmLogout() {
+  // Clear session storage
+  sessionStorage.clear();
+  // Redirect to login page
+  window.location.href = 'LoginPage.html';
+}
+
+// Close modal when clicking outside of it
+document.addEventListener('click', function(event) {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  if (event.target === modalOverlay) {
+    closeLogoutModal();
+  }
+});
+</script>
+</body>
+</html>

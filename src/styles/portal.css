@@ -1,0 +1,313 @@
+/* ─── WMSU AttendTrack · portal.css ─── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --red:       #7b1728;
+  --red-light: #c0392b;
+  --red-pale:  rgba(155,43,34,.12);
+  --dark:      #7b1728;
+  --dark2:     #7b1728;
+  --card:      #fff;
+  --bg:        #f5f4f2;
+  --border:    #e8e4e0;
+  --text:      #1a1a1a;
+  --muted:     #888;
+  --green:     #2e7d50;
+  --orange:    #c07020;
+  --blue:      #1a5fa8;
+  --sb-w:      240px;
+  --radius:    12px;
+  --shadow:    0 2px 16px rgba(0,0,0,.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text)}
+
+/* ── APP SHELL ── */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sb-w);min-width:var(--sb-w);
+  background:var(--red);color:#fff;
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+  transition:.3s;
+}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:22px 18px 16px}
+.sb-logo{width:38px;height:38px;border-radius:18px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logo img{width:100%;height:100%;object-fit:contain}
+.sb-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.sb-sub{font-size:10px;color:#aaa;margin-top:1px}
+
+.sb-student{padding:14px 18px;border-top:1px solid #333;border-bottom:1px solid #333;margin-bottom:8px}
+.sb-student-name{font-weight:600;font-size:14px}
+.sb-student-id{font-size:11px;color:#aaa;margin-top:2px}
+.sb-student-sec{font-size:11px;color:var(--red-light);margin-top:2px}
+
+.sb-nav{flex:1;padding:8px 10px}
+.sb-nav-label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.08em;padding:10px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:8px;text-decoration:none;color:#ccc;font-size:13.5px;font-weight:500;transition:.15s;margin-bottom:2px}
+.nav-item:hover{background:#2e2e2e;color:#fff}
+.nav-item.active{background:var(--red);color:#fff}
+.nav-item-icon{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+
+.sb-footer{padding:14px 10px}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;color:#aaa;font-size:13px;transition:.15s}
+.sb-logout:hover{background:#2e2e2e;color:#fff}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:#fff;border-bottom:1px solid var(--border)}
+.tb-page-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:800}
+.tb-breadcrumb{font-size:12px;color:var(--muted);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-section-chip{background:var(--red-pale);color:var(--red);font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px}
+.tb-avatar{width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+.mobile-topbar{display:none;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--dark)}
+.mtb-brand{display:flex;align-items:center;gap:10px}
+.mtb-logo{width:32px;height:32px;border-radius:18px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+.mtb-logo img{width:100%;height:100%;object-fit:contain}
+.mtb-title{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:#fff}
+.mtb-sub{font-size:10px;color:#aaa}
+.mtb-chip{background:var(--red-pale);color:#f87;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
+
+.page-body{flex:1;overflow-y:auto;padding:24px}
+.page-content{max-width:1100px;margin:0 auto}
+
+/* ── UTILS ── */
+.sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+.sec-label.mb{margin-bottom:10px}
+.mb{margin-bottom:16px}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi-card{background:#fff;border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.kpi-icon{font-size:22px;width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.kpi-icon.g{background:#e8f5ee}
+.kpi-icon.r{background:#fdecea}
+.kpi-icon.o{background:#fff3e0}
+.kpi-icon.m{background:#e3f0fb}
+.kpi-val{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;line-height:1}
+.kpi-val.g{color:var(--green)}.kpi-val.r{color:#c0392b}.kpi-val.o{color:var(--orange)}.kpi-val.m{color:var(--blue)}
+.kpi-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── DASH LAYOUT ── */
+.dash-layout{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+.dash-left{display:flex;flex-direction:column;gap:18px}
+.dash-right{}
+
+/* ── RATE BANNER ── */
+.rate-banner{background:#fff;border-radius:var(--radius);padding:20px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow)}
+.rb-donut{}
+.rb-circle{width:80px;height:80px;border-radius:50%;border:8px solid var(--red);display:flex;align-items:center;justify-content:center;background:#fff}
+.rb-inner{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--red)}
+.rb-title{font-weight:700;font-size:14px}
+.rb-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.rb-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.rb-chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.rb-chip.g{background:#e8f5ee;color:var(--green)}
+.rb-chip.o{background:#fff3e0;color:var(--orange)}
+.rb-chip.r{background:#fdecea;color:#c0392b}
+
+/* ── BAR CHART ── */
+.bar-chart-card{background:#fff;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.bcc-title{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px}
+.bar-row{display:flex;gap:12px;align-items:flex-end;height:100px}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.bar-num{font-size:11px;font-weight:700;color:var(--text)}
+.bar-fill{border-radius:4px 4px 0 0;width:100%;min-height:8px;transition:.5s}
+.bar-fill.g{background:var(--green)}.bar-fill.o{background:var(--orange)}.bar-fill.r{background:#c0392b}.bar-fill.m{background:var(--blue)}
+.bar-day{font-size:10px;color:var(--muted)}
+
+/* ── RATE LIST ── */
+.rate-list{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.rate-row{display:flex;align-items:center;gap:10px}
+.rate-icon{font-size:18px;width:32px;text-align:center;flex-shrink:0}
+.rate-info{flex:1}
+.rate-name-row{display:flex;justify-content:space-between;margin-bottom:5px}
+.rate-name{font-size:12px;font-weight:600}
+.rate-pct{font-size:12px;font-weight:700}
+.rate-pct.g{color:var(--green)}.rate-pct.o{color:var(--orange)}.rate-pct.r{color:#c0392b}
+.rate-bar-bg{background:#f0eeec;border-radius:4px;height:6px}
+.rate-bar-fill{height:100%;border-radius:4px;transition:.8s}
+.rate-bar-fill.g{background:var(--green)}.rate-bar-fill.o{background:var(--orange)}.rate-bar-fill.r{background:#c0392b}
+
+/* ── HISTORY CARD ── */
+.hist-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:sticky;top:0}
+.hist-header{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:14px 16px;border-bottom:1px solid var(--border)}
+.hist-scroll{overflow-y:auto;max-height:480px}
+.hist-row{display:grid;grid-template-columns:36px 1fr auto auto;gap:8px;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;transition:.15s}
+.hist-row:hover{background:#fafafa}
+.hist-date{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap}
+.hist-subj{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-code{font-size:10px;color:var(--muted);margin-top:1px}
+.hist-time{font-size:11px;color:var(--muted);white-space:nowrap}
+.badge{font-size:10px;font-weight:700;padding:3px 7px;border-radius:20px;white-space:nowrap}
+.badge.p{background:#e8f5ee;color:var(--green)}
+.badge.l{background:#fff3e0;color:var(--orange)}
+.badge.a{background:#fdecea;color:#c0392b}
+
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);z-index:100}
+.bnav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;text-decoration:none;color:var(--muted);font-size:10px;font-weight:500;transition:.15s}
+.bnav-tab.active{color:var(--red)}
+.bnav-icon{font-size:18px}
+
+/* ── HOME PAGE ── */
+.home-hero{background:var(--red);border-radius:var(--radius);padding:24px;color:#fff;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.home-hero-left{}
+.home-hello{font-size:12px;color:#aaa;margin-bottom:4px}
+.home-name{font-family:'Sora',sans-serif;font-size:22px;font-weight:800}
+.home-info{font-size:12px;color:#aaa;margin-top:4px}
+.home-qr-btn{background:var(--red);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;text-decoration:none;transition:.15s}
+.home-qr-btn:hover{background:var(--red-light)}
+
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.subject-card{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--red)}
+.sc-code{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.06em}
+.sc-name{font-size:13px;font-weight:700;margin:4px 0}
+.sc-info{font-size:11px;color:var(--muted)}
+.sc-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px}
+.sc-badge.ongoing{background:#e8f5ee;color:var(--green)}
+
+/* ── QR PAGE ── */
+.qr-wrap{display:flex;flex-direction:column;align-items:center;gap:18px;padding:30px 0}
+.qr-card{background:#fff;border-radius:16px;padding:30px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:16px;max-width:340px;width:100%}
+.qr-box{width:200px;height:200px;background:#7b1728;display:flex;align-items:center;justify-content:center;border-radius:12px;position:relative;overflow:hidden}
+.qr-svg{width:180px;height:180px}
+.qr-name{font-family:'Sora',sans-serif;font-size:18px;color:#7a1829;font-weight:800;text-align:center}
+.qr-id{font-size:13px;color:var(--muted);text-align:center}
+.qr-section{font-size:12px;color:var(--red);font-weight:600;text-align:center}
+.qr-note{font-size:11px;color:var(--muted);text-align:center;max-width:260px;line-height:1.5}
+.qr-download-btn{background:var(--red);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;width:100%;transition:.15s}
+.qr-download-btn:hover{background:#333}
+
+/* ── SETTINGS PAGE ── */
+.settings-grid{display:flex;flex-direction:column;gap:14px;max-width:600px}
+.settings-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.settings-card-header{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid #f5f5f5}
+.settings-row:last-child{border-bottom:none}
+.sr-label{font-size:13px;font-weight:600}
+.sr-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.sr-val{font-size:13px;color:var(--muted)}
+.toggle{width:42px;height:24px;background:#ddd;border-radius:12px;position:relative;cursor:pointer;transition:.3s;flex-shrink:0}
+.toggle.on{background:var(--red)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.3s}
+.toggle.on::after{left:21px}
+.settings-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);transition:.15s}
+.settings-btn:hover{border-color:var(--red);color:var(--red)}
+.logout-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;margin-top:8px}
+.logout-btn:hover{background:var(--red-light)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-layout{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .sidebar{display:none}
+  .top-bar{display:none}
+  .mobile-topbar{display:flex}
+  .bottom-nav{display:flex}
+  .page-body{padding:16px 14px 80px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+.logout-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logout-modal-overlay.active {
+    display: flex;
+  }
+
+  .logout-modal {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    padding: 32px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logout-modal-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .logout-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logout-modal-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: all 0.2s ease;
+  }
+
+  .logout-modal-btn-cancel {
+    background: #f0f0f0;
+    color: #1a1a1a;
+    border: 1px solid #e8e4e0;
+  }
+
+  .logout-modal-btn-cancel:hover {
+    background: #e8e8e8;
+  }
+
+  .logout-modal-btn-confirm {
+    background: #9b1f33;
+    color: white;
+  }
+
+  .logout-modal-btn-confirm:hover {
+    background: #7a1829;
+  }
