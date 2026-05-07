@@ -6,11 +6,11 @@ var pwdErr   = document.getElementById('pwd-err');
 
 /* ── Sample Accounts for Demo ── */
 var sampleAccounts = {
-  'admin123': { password: 'admin123', role: 'admin', redirect: 'src/pages/adminSite.html' },
-  'itdept123': { password: 'itdept123', role: 'sub-adminIT', redirect: 'src/pages/subAdminIT.html' },
-  'csdept123': { password: 'csdept123', role: 'sub-adminCCS', redirect: 'src/pages/subAdminCCS.html' },
-  'teacher123': { password: 'teacher123', role: 'teacher', redirect: 'src/pages/teacher_dashboard.html' },
-  'student123': { password: 'student123', role: 'student', redirect: 'src/pages/student-dashboard.html' }
+  'admin123': { password: 'admin123', role: 'admin', redirect: 'pages/adminSite.html' },
+  'itdept123': { password: 'itdept123', role: 'sub-adminIT', redirect: 'pages/subAdminIT.html' },
+  'csdept123': { password: 'csdept123', role: 'sub-adminCCS', redirect: 'pages/subAdminCCS.html' },
+  'teacher123': { password: 'teacher123', role: 'teacher', redirect: 'pages/teacher_dashboard.html' },
+  'student123': { password: 'student123', role: 'student', redirect: 'pages/student-dashboard.html' }
 };
 
 /* ── Sign-in ── */
