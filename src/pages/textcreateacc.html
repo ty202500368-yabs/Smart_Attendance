@@ -9,7 +9,7 @@
   <style>
     .waiting-confirmation-modal {
       display: none;
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
@@ -92,8 +92,8 @@
 <div class="reg-wrap">
   <div class="reg-header">
     <div style="display:flex;gap:10px;align-items:center;">
-        <img src="../components/wmsu.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="WMSU Logo"/>
-        <img src="../components/ccs.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="CCS Logo"/>
+        <img src="/src/components/wmsu.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="WMSU Logo"/>
+        <img src="/src/components/ccs.jpeg" style="width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.25);" alt="CCS Logo"/>
     </div>
     <div class="reg-header-text">
       <strong>WMSU AttendTrack</strong>
@@ -226,7 +226,7 @@
         </button>
       </div>
 
-      <div class="already-text">Already have an account? <a href="LoginPage.html" onclick="sendPrompt('I already have a WMSU AttendTrack account, take me to the sign in page')">Sign in here</a></div>
+      <div class="already-text">Already have an account? <a href="/src/pages/LoginPage.html" onclick="sendPrompt('I already have a WMSU AttendTrack account, take me to the sign in page')">Sign in here</a></div>
     </div>
 
     <!-- STEP 2: Verification -->
@@ -282,8 +282,8 @@
     <div id="waiting-confirmation-modal" class="waiting-confirmation-modal">
       <div class="waiting-confirmation-content">
         <div class="waiting-spinner"></div>
-        <div class="waiting-title">Wait for Confirmation<span class="waiting-dot-animation"></span></div>
-        <p class="waiting-text">Admin is already checking your credentials</p>
+        <div class="waiting-title">Confirming Your Account<span class="waiting-dot-animation"></span></div>
+        <p class="waiting-text">Please wait while the admin verifies and confirms your registration. This may take a few moments.</p>
       </div>
     </div>
 
@@ -295,20 +295,28 @@
         </div>
         <div class="confirmation-title" style="font-size: 28px; margin-bottom: 15px;">Account Created Successfully!</div>
         <p style="font-size: 16px; color: #333; margin-bottom: 30px;">Your registration is complete.</p>
-        <div style="background-color: #f0f8f4; border-left: 4px solid #1d9e75; padding: 20px 25px; border-radius: 8px; max-width: 400px; margin-bottom: 30px;">
+        <div style="background-color: #f0f8f4; border-left: 4px solid #1d9e75; padding: 20px 25px; border-radius: 8px; max-width: 400px; margin-bottom: 16px;">
           <p style="font-size: 18px; color: #1d9e75; font-weight: 600; margin: 0;">Waiting for admin to confirm your registration</p>
           <p style="font-size: 13px; color: #666; margin-top: 10px; margin-bottom: 0;">You will receive an email notification once your account has been approved.</p>
         </div>
+        <div style="display: flex; align-items: center; gap: 14px; background-color: #fff8e6; border: 1px solid #f0c040; border-radius: 10px; padding: 18px 24px; max-width: 400px; margin-bottom: 30px;">
+          <div style="flex-shrink: 0;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e09c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div>
+            <p style="font-size: 14px; font-weight: 600; color: #b07a00; margin: 0 0 4px 0;">Pending Admin Review</p>
+            <p style="font-size: 13px; color: #7a5a00; margin: 0; line-height: 1.5;">Please wait for further instruction — Admin is evaluating your credentials.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="submit-row" style="margin-top: 30px;">
-        <button class="btn-submit" onclick="showWaitingConfirmationModal()" style="width: 100%; margin-bottom: 10px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          Waiting for Confirmation
-        </button>
-        <a href="../pages/LoginPage.html" style="text-decoration: none; width: 100%;">
-          <button class="btn-submit" style="width: 100%;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      <div class="submit-row" style="margin-top: 10px; display: flex; justify-content: center;">
+        <a href="../pages/LoginPage.html" style="text-decoration: none;">
+          <button
+            onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 28px rgba(29,158,117,0.45)';"
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 14px rgba(29,158,117,0.3)';"
+            style="display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:linear-gradient(135deg,#1d9e75,#0f6e56);color:#fff;font-size:15px;font-weight:600;border:none;border-radius:50px;cursor:pointer;box-shadow:0 4px 14px rgba(29,158,117,0.3);transition:transform 0.2s ease,box-shadow 0.2s ease;letter-spacing:0.3px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
             Go to Sign In
           </button>
         </a>
@@ -316,7 +324,7 @@
     </div>
   </div>
 </div>
-<script src="../js/createAcc.js"></script>
+<script src="/src/js/createAcc.js"></script>
 
 </body>
 </html>

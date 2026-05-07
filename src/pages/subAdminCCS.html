@@ -6,6 +6,102 @@
 <title>WMSU ScanTracker · Sub-Admin CS</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
+  /* Logout Modal Styles */
+  .logout-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logout-modal-overlay.active {
+    display: flex;
+  }
+
+  .logout-modal {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    padding: 32px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logout-modal-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .logout-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .logout-modal-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .logout-modal-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logout-modal-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s ease;
+  }
+
+  .logout-modal-btn-cancel {
+    background: #f0f0f0;
+    color: #1a1a1a;
+    border: 1px solid #e8e4e0;
+  }
+
+  .logout-modal-btn-cancel:hover {
+    background: #e8e8e8;
+  }
+
+  .logout-modal-btn-confirm {
+    background: #9b1f33;
+    color: white;
+  }
+
+  .logout-modal-btn-confirm:hover {
+    background: #7a1829;
+  }
+
 /* ── RESET & BASE ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -320,7 +416,7 @@ tr:last-child td{border-bottom:none;}
   </div>
 
   <div class="sidebar-footer">
-    <a onclick="alert('Logging out...')">
+    <a onclick="handleLogout('logout-confirmation')">
       <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       Logout
     </a>
@@ -1379,6 +1475,19 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div class="logout-modal-overlay" id="logoutModalOverlay">
+  <div class="logout-modal">
+    <div class="logout-modal-icon">🚪</div>
+    <div class="logout-modal-title">Log Out?</div>
+    <div class="logout-modal-text">Are you sure you want to log out? You'll need to sign in again to access your account.</div>
+    <div class="logout-modal-buttons">
+      <button class="logout-modal-btn logout-modal-btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+      <button class="logout-modal-btn logout-modal-btn-confirm" onclick="confirmLogout()">Log Out</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── DATA ──
 const rooms = [
@@ -1599,6 +1708,29 @@ function openRoomDetail(roomId,day){
   }
   openModal('modal-room-detail');
 }
+
+/* ── LOGOUT MODAL FUNCTIONS ── */
+function handleLogout() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.add('active');
+}
+
+function closeLogoutModal() {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  modalOverlay.classList.remove('active');
+}
+
+function confirmLogout() {
+  sessionStorage.clear();
+  window.location.href = 'LoginPage.html';
+}
+
+document.addEventListener('click', function(event) {
+  const modalOverlay = document.getElementById('logoutModalOverlay');
+  if (event.target === modalOverlay) {
+    closeLogoutModal();
+  }
+});
 
 // Init rooms on load
 document.addEventListener('DOMContentLoaded',()=>renderRooms());

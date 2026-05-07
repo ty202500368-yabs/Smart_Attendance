@@ -424,3 +424,5 @@ function togglePw(id, btn) {
     if (!hasFile) { sendPrompt('I forgot to upload my COR on the registration form. Is it required?'); return; }
     sendPrompt('I filled out the WMSU student registration form for ' + fname + ' ' + lname + ' with email ' + email + '@wmsu.edu.ph. What happens next?');
   }
+
+  
