@@ -1381,23 +1381,33 @@
     </div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="field"><label>Full Name</label><input id="at-name" placeholder="e.g. Ms. Ana Reyes"/></div>
+        <div class="field"><label>Last Name</label><input id="at-name" placeholder="e.g. Reyes"/></div>
+        <div class="field"><label>First Name</label><input id="at-first-name" placeholder="e.g. Ana"/></div>
+        <div class="field"><label>Middle Name</label><input id="at-middle-name" placeholder="e.g. Blea"/></div>
         <div class="field"><label>WMSU Email</label><input id="at-email" placeholder="name@wmsu.edu.ph"/></div>
         <div class="field"><label>Advisory Section</label>
         <select id="at-advisory">
           <option value="">— None —</option>
           <option value="BSCS 1A">BSCS 1A</option>
           <option value="BSCS 1B">BSCS 1B</option>
+          <option value="ACT-AD 1A">ACT-AD 1A</option>
+          <option value="ACT-AD 1B">ACT-AD 1B</option>
           <option value="BSCS 2A">BSCS 2A</option>
           <option value="BSCS 2B">BSCS 2B</option>
+          <option value="ACT-AD 2A">ACT-AD 2A</option>
+          <option value="ACT-AD 2B">ACT-AD 2B</option>
           <option value="BSCS 3A">BSCS 3A</option>
           <option value="BSCS 3B">BSCS 3B</option>
           <option value="BSCS 4A">BSCS 4A</option>
           <option value="BSCS 4B">BSCS 4B</option>
           <option value="BSIT 1A">BSIT 1A</option>
           <option value="BSIT 1B">BSIT 1B</option>
+          <option value="ACT-NT 1A">ACT-NT 1A</option>
+          <option value="ACT-NT 1B">ACT-NT 1B</option>
           <option value="BSIT 2A">BSIT 2A</option>
           <option value="BSIT 2B">BSIT 2B</option>
+          <option value="ACT-NT 2A">ACT-NT 2A</option>
+          <option value="ACT-NT 2B">ACT-NT 2B</option>
           <option value="BSIT 3A">BSIT 3A</option>
           <option value="BSIT 3B">BSIT 3B</option>
           <option value="BSIT 4A">BSIT 4A</option>
@@ -1693,7 +1703,7 @@
       <div class="form-grid">
         <div class="field"><label>Room Name / Code</label><input placeholder="e.g. LR1"/></div>
         <div class="field"><label>Room Type</label><select><option>Lecture Room</option><option>Computer Laboratory</option><option>Seminar Room</option></select></div>
-        <div class="field"><label>Number of Seats</label><input type="number" value="40"/></div>
+        <div class="field"><label>Number of Seats</label><input type="number" value="40" min="1" max="50"/></div>
         <div class="field"><label>Floor / Building</label><input placeholder="e.g. 2nd Floor, CCS Bldg"/></div>
       </div>
     </div>
