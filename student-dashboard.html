@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMSU AttendTrack — My Attendance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><img src="wmsulogo.jpg" alt="WMSU"></div>
+      <div class="sb-brand-text"><div class="sb-title">AttendTrack</div><div class="sb-sub">Student Portal</div></div>
+    </div>
+    <div class="sb-student">
+      <div class="sb-student-name">Regan Kalnain</div>
+      <div class="sb-student-id">WMSU-2025-001</div>
+      <div class="sb-student-sec">BSCS 1B · CCS Dept.</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-nav-label">Navigation</div>
+      <a href="student-index.html" class="nav-item"><span class="nav-item-icon">🏠</span><span class="nav-item-text">Home</span></a>
+      <a href="student-subjects.html" class="nav-item"><span class="nav-item-icon">📚</span><span class="nav-item-text">My Subjects</span></a>
+      <a href="student-scanner.html" class="nav-item"><span class="nav-item-icon">⛶</span><span class="nav-item-text">My QR Code</span></a>
+      <a href="student-dashboard.html" class="nav-item active"><span class="nav-item-icon">📊</span><span class="nav-item-text">My Attendance</span></a>
+      <a href="student-settings.html" class="nav-item"><span class="nav-item-icon">⚙️</span><span class="nav-item-text">Settings</span></a>
+    </nav>
+    <div class="sb-footer"><div class="sb-logout" onclick="window.location.href='LoginPage.html'"><span class="nav-item-icon">🚪</span><span>Log Out</span></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="top-bar">
+      <div><div class="tb-page-title">My Attendance</div><div class="tb-breadcrumb">First Semester · AY 2025–2026</div></div>
+      <div class="tb-right"><div class="tb-section-chip">🎓 BSCS 1B</div><div class="tb-avatar">RK</div></div>
+    </header>
+    <header class="mobile-topbar">
+      <div class="mtb-brand">
+        <div class="mtb-logo"><img src="wmsulogo.jpg" alt="WMSU"></div>
+        <div><div class="mtb-title">AttendTrack</div><div class="mtb-sub">Student Portal</div></div>
+      </div>
+      <div class="mtb-chip">🎓 BSCS 1B</div>
+    </header>
+
+    <div class="page-body">
+      <div class="page-content">
+
+        <div class="sec-label mb">This Semester</div>
+        <div class="kpi-grid" style="margin-bottom:1.25rem">
+          <div class="kpi-card"><div class="kpi-icon g">✅</div><div><div class="kpi-val g">48</div><div class="kpi-lbl">Total Present</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon r">❌</div><div><div class="kpi-val r">4</div><div class="kpi-lbl">Total Absent</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon o">⏰</div><div><div class="kpi-val o">6</div><div class="kpi-lbl">Total Late</div></div></div>
+          <div class="kpi-card"><div class="kpi-icon m">📈</div><div><div class="kpi-val m">83%</div><div class="kpi-lbl">Overall Rate</div></div></div>
+        </div>
+
+        <div class="dash-layout">
+          <div class="dash-left">
+
+            <div class="rate-banner">
+              <div class="rb-donut"><div class="rb-circle"><div class="rb-inner">83%</div></div></div>
+              <div class="rb-info">
+                <div class="rb-title">Overall Attendance Rate</div>
+                <div class="rb-sub">Across all 6 subjects · First Semester</div>
+                <div class="rb-chips">
+                  <div class="rb-chip g">48 Present</div>
+                  <div class="rb-chip o">6 Late</div>
+                  <div class="rb-chip r">4 Absent</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sec-label">This Week</div>
+            <div class="bar-chart-card">
+              <div class="bcc-title">Daily Attendance Count</div>
+              <div class="bar-row">
+                <div class="bar-col"><div class="bar-num">5</div><div class="bar-fill g" style="height:100%"></div><div class="bar-day">Mon</div></div>
+                <div class="bar-col"><div class="bar-num">4</div><div class="bar-fill g" style="height:80%"></div><div class="bar-day">Tue</div></div>
+                <div class="bar-col"><div class="bar-num">3</div><div class="bar-fill o" style="height:60%"></div><div class="bar-day">Wed</div></div>
+                <div class="bar-col"><div class="bar-num">5</div><div class="bar-fill g" style="height:100%"></div><div class="bar-day">Thu</div></div>
+                <div class="bar-col"><div class="bar-num">2</div><div class="bar-fill m" style="height:40%"></div><div class="bar-day">Fri</div></div>
+              </div>
+            </div>
+
+            <div class="sec-label">Per Subject</div>
+            <div class="rate-list">
+              <div class="rate-row"><div class="rate-icon">📘</div><div class="rate-info"><div class="rate-name-row"><span class="rate-name">Discrete Structures 1</span><span class="rate-pct g">92%</span></div><div class="rate-bar-bg"><div class="rate-bar-fill g" style="width:92%"></div></div></div></div>
+              <div class="rate-row"><div class="rate-icon">💻</div><div class="rate-info"><div class="rate-name-row"><span class="rate-name">Computer Programming 1</span><span class="rate-pct g">88%</span></div><div class="rate-bar-bg"><div class="rate-bar-fill g" style="width:88%"></div></div></div></div>
+              <div class="rate-row"><div class="rate-icon">🌐</div><div class="rate-info"><div class="rate-name-row"><span class="rate-name">Web Development</span><span class="rate-pct o">72%</span></div><div class="rate-bar-bg"><div class="rate-bar-fill o" style="width:72%"></div></div></div></div>
+              <div class="rate-row"><div class="rate-icon">🔷</div><div class="rate-info"><div class="rate-name-row"><span class="rate-name">Object-Oriented Programming</span><span class="rate-pct g">95%</span></div><div class="rate-bar-bg"><div class="rate-bar-fill g" style="width:95%"></div></div></div></div>
+              <div class="rate-row"><div class="rate-icon">🖥️</div><div class="rate-info"><div class="rate-name-row"><span class="rate-name">Introduction to Computing</span><span class="rate-pct g">85%</span></div><div class="rate-bar-bg"><div class="rate-bar-fill g" style="width:85%"></div></div></div></div>
+              <div class="rate-row"><div class="rate-icon">⚙️</div><div class="rate-info"><div class="rate-name-row"><span class="rate-name">Computer Programming 2</span><span class="rate-pct r">65%</span></div><div class="rate-bar-bg"><div class="rate-bar-fill r" style="width:65%"></div></div></div></div>
+            </div>
+
+          </div>
+
+          <div class="dash-right">
+            <div class="sec-label">Recent History</div>
+            <div class="hist-card">
+              <div class="hist-header">Attendance Log</div>
+              <div class="hist-scroll">
+                <div class="hist-row"><div class="hist-date">Mar 8</div><div class="hist-info"><div class="hist-subj">Discrete Structures 1</div><div class="hist-code">DS111 · LR2</div></div><div class="hist-time">8:09 AM</div><div class="badge p">● Present</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 8</div><div class="hist-info"><div class="hist-subj">Computer Programming 1</div><div class="hist-code">CC101 · LR1</div></div><div class="hist-time">7:03 AM</div><div class="badge p">● Present</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 7</div><div class="hist-info"><div class="hist-subj">Web Development</div><div class="hist-code">WD101 · LAB3</div></div><div class="hist-time">10:22 AM</div><div class="badge l">⏰ Late</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 7</div><div class="hist-info"><div class="hist-subj">OOP</div><div class="hist-code">OOP · LAB2</div></div><div class="hist-time">8:05 AM</div><div class="badge p">● Present</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 6</div><div class="hist-info"><div class="hist-subj">Discrete Structures 1</div><div class="hist-code">DS111 · LR2</div></div><div class="hist-time">—</div><div class="badge a">✕ Absent</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 6</div><div class="hist-info"><div class="hist-subj">Computer Programming 2</div><div class="hist-code">CC102 · LAB1</div></div><div class="hist-time">—</div><div class="badge a">✕ Absent</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 5</div><div class="hist-info"><div class="hist-subj">Intro to Computing</div><div class="hist-code">CC100 · LR3</div></div><div class="hist-time">9:02 AM</div><div class="badge p">● Present</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 5</div><div class="hist-info"><div class="hist-subj">Web Development</div><div class="hist-code">WD101 · LAB3</div></div><div class="hist-time">10:18 AM</div><div class="badge l">⏰ Late</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 4</div><div class="hist-info"><div class="hist-subj">OOP</div><div class="hist-code">OOP · LAB2</div></div><div class="hist-time">8:01 AM</div><div class="badge p">● Present</div></div>
+                <div class="hist-row"><div class="hist-date">Mar 4</div><div class="hist-info"><div class="hist-subj">Intro to Computing</div><div class="hist-code">CC100 · LR3</div></div><div class="hist-time">9:09 AM</div><div class="badge p">● Present</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="student-index.html" class="bnav-tab"><div class="bnav-icon">🏠</div><span>Home</span></a>
+    <a href="student-subjects.html" class="bnav-tab"><div class="bnav-icon">📚</div><span>Subjects</span></a>
+    <a href="student-scanner.html" class="bnav-tab"><div class="bnav-icon">⛶</div><span>QR Code</span></a>
+    <a href="student-dashboard.html" class="bnav-tab active"><div class="bnav-icon">📊</div><span>Attendance</span></a>
+    <a href="student-settings.html" class="bnav-tab"><div class="bnav-icon">⚙️</div><span>Settings</span></a>
+  </nav>
+</div>
+</body>
+</html>
